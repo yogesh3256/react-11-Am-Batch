@@ -49,6 +49,7 @@ import ModalAdd from './Component/commonTable/ModalAdd';
 import ParrentTab from './Component/Contextapi/usecontext/ParrentTab';
 import DateTaskForm from './Component/form/DateTask/DateTaskForm';
 import Date from './Component/form/DateTask/Date';
+import Time from './Component/form/DateTask/Time';
 
 
  
@@ -153,12 +154,14 @@ function App() {
  {/* <ItemMaster/> */}
  {/* <Navbar/> */}
  {/* <ModalAdd/> */}
+{/* 
+ <ParrentTab/> */}
 
- {/* <ParrentTab/> */}
 
-
- <DateTaskForm/>
+ {/* <DateTaskForm/>
+  */}
  {/* <Date/> */}
+ <Time/>
     </SnackbarProvider>
     </>
   )

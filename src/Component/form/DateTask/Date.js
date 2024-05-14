@@ -7,6 +7,8 @@ const ConsultationForm = () => {
     const { control, handleSubmit, reset } = useForm();
     const [consultationData, setConsultationData] = useState([])
     const onSubmit = (data) => {
+        const { consultationCharges, FollowUpCharges } = data;
+
         // Check if both "From Time" and "To Time" are selected
         if (!data.fromTime || !data.toTime) {
             // Display toast message indicating that both times need to be selected
@@ -43,6 +45,11 @@ const ConsultationForm = () => {
             let tempData = [...consultationData];
             tempData.push(data);
             setConsultationData(tempData);
+
+            // Calculate total charges
+            const totalCharges = parseInt(consultationCharges) + parseInt(FollowUpCharges);
+            data.totalCharges = totalCharges;
+
             reset();
 
             // Display toast message indicating successful addition
@@ -163,7 +170,8 @@ const ConsultationForm = () => {
                 </div>
             </form>
             <div>
-                <CommonTable DataResult={consultationData} />
+                <CommonTable DataResult={consultationData}
+                 />
             </div>
         </>
     );

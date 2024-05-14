@@ -134,39 +134,41 @@ function Curdoperation() {
 
         </div>
       </div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>Sr.No</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>id.</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Firstname</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>lastname</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }} >Age</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((item, index) => {
-              return (
-                <TableRow key={index}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{item.id}</TableCell>
-                  <TableCell>{item.firstname}</TableCell>
-                  <TableCell>{item.lastname}</TableCell>
-                  <TableCell>{item.age}</TableCell>
-                  <TableCell>
-                    <Button variant="contained" color="primary" onClick={() => hanleEdit(item.id)}>Edit</Button>&nbsp;
-                    <Button variant="contained" color="primary" onClick={() => hanleDelete(item.id)}>Delete</Button>
-                  </TableCell>
+      {
+        data.length > 0 ? (<TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 'bold' }}>Sr.No</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>id.</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Firstname</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>lastname</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }} >Age</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map((item, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{item.id}</TableCell>
+                    <TableCell>{item.firstname}</TableCell>
+                    <TableCell>{item.lastname}</TableCell>
+                    <TableCell>{item.age}</TableCell>
+                    <TableCell>
+                      <Button variant="contained" color="primary" onClick={() => hanleEdit(item.id)}>Edit</Button>&nbsp;
+                      <Button variant="contained" color="primary" onClick={() => hanleDelete(item.id)}>Delete</Button>
+                    </TableCell>
 
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        ) : ("")
+      }
     </div>
   )
 }

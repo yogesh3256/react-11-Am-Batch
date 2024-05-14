@@ -17,13 +17,13 @@ function DateTaskForm() {
   const { handleSubmit, control } = useForm();
 
   const onSubmit = (data) => {
-    // Extracting only the key and value from the form data
+     
     const extractedData = {
       weekDay: data.weekDay.value,
       fullname: data.fullname
     };
     console.log('extractedData', extractedData);
-    // Handle form data submission here with extractedData
+    
   };
 
   return (
