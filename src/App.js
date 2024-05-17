@@ -50,6 +50,8 @@ import ParrentTab from './Component/Contextapi/usecontext/ParrentTab';
 import DateTaskForm from './Component/form/DateTask/DateTaskForm';
 import Date from './Component/form/DateTask/Date';
 import Time from './Component/form/DateTask/Time';
+import UseReducerForm from './Component/practice/usereducer/UseReducerForm';
+import AxiosFetchApi from './Component/Axios/AxiosFetchApi';
 
 
  
@@ -138,7 +140,7 @@ function App() {
       {/* <Count/> */}
       {/* <Count2/> */}
       {/* <Usereducer/>    */}
-
+{/* <UseReducerForm/> */}
       {/* <Input/> */}
 
 
@@ -161,7 +163,9 @@ function App() {
  {/* <DateTaskForm/>
   */}
  {/* <Date/> */}
- <Time/>
+ {/* <Time/> */}
+
+ <AxiosFetchApi/>
     </SnackbarProvider>
     </>
   )

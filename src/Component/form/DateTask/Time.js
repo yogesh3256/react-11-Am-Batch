@@ -9,8 +9,7 @@ function Time() {
         intervalRef.current = setInterval(() => {
             setTime(prevTime => prevTime + 1);
         }, 1000);
-
-        // Clear interval on component unmount
+ 
         return () => clearInterval(intervalRef.current);
     }, []);
 
