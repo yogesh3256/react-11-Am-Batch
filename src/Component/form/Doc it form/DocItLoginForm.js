@@ -6,6 +6,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 
 import dayjs from 'dayjs';
 import CommonButton from '../../common/Button/CommonButton';
+import axios from 'axios';
 
 const genderOptions = [
     { value: 'male', label: 'Male' },
@@ -15,8 +16,11 @@ const genderOptions = [
 
 const PatientRegistrationForm = () => {
     const { control, handleSubmit, watch, reset } = useForm();
-    const [ageData, setAgeData] = useState({ age: 0, years: 0, months: 0, days: 0 });
-    const [selectedGender, setSelectedGender] = useState(null); // State to track the selected gender
+    const [ageData, setAgeData] = useState({ age: 0, years: 0, months: 0, days: 0 })
+    const [prefix, setPrefix] = useState([])
+    const [maritalStatus, setMaritalStatus] = useState([])
+    const [bloodGroup, setBloodGroup] = useState([])
+    const [ gender,  setGender] = useState([])
 
     const calculateAge = (dob, currentDate) => {
         const birthDate = dayjs(dob);
@@ -37,27 +41,54 @@ const PatientRegistrationForm = () => {
     }, [dateOfBirth]);
 
     const onSubmit = data => {
-        // Include the selected gender value in the form data
-        data.gender = selectedGender;
         console.log(data);
-        setSelectedGender(null);
+
         reset();
-    
-    
+
+
     };
 
-    const handleGenderClick = (value) => {
-        setSelectedGender(value);
-    };
 
-    // Define a function to conditionally style the buttons
-    const getButtonStyle = (gender) => {
-        return {
-            backgroundColor: selectedGender === gender ? '#00008B' : undefined, // Dark blue if selected, default otherwise
-            color: selectedGender === gender ? '#FFFFFF' : undefined, // White text if selected, default otherwise
-        };
-    };
 
+
+    useEffect(() => {
+        axios.get('http://192.168.0.85:8081/getPrefixDropDown')
+            .then((res) => {
+                setPrefix(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [])
+    useEffect(() => {
+        axios.get('http://192.168.0.85:8081/getMaritalStatusDropDown')
+            .then((res) => {
+                setMaritalStatus(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [])
+
+    useEffect(() => {
+        axios.get('http://192.168.0.85:8081/getBloodGroupDropDown')
+            .then((res) => {
+                setBloodGroup(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [])
+
+    useEffect(() => {
+        axios.get('http://192.168.0.85:8081/getGender')
+            .then((res) => {
+                 setGender(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [])
 
     return (
         <form className='mx-16 border border-gray-800 p-4 shadow-md' onSubmit={handleSubmit(onSubmit)}>
@@ -129,9 +160,9 @@ const PatientRegistrationForm = () => {
                                     {...field}
                                     label="Prefix*"
                                 >
-                                    {genderOptions?.map(option => (
+                                    {prefix?.map(option => (
                                         <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
+                                            {option.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -301,20 +332,28 @@ const PatientRegistrationForm = () => {
                     />
                 </div>
                 <div className='flex gap-2 mb-4'>
-                    <div className='mt-3.5'>
-                        <label htmlFor="gender" className='mr-4'>Gender:</label>
-                        <Controller
-                            name="gender"
-                            control={control}
-                            defaultValue=""
-                            render={({ field }) => (
-                                <ButtonGroup aria-label="Basic button group" id="gender">
-                                    <Button value={'Male'} style={getButtonStyle('Male')} onClick={() => handleGenderClick('Male')}>M</Button>
-                                    <Button value={'Female'} style={getButtonStyle('Female')} onClick={() => handleGenderClick('Female')}>F</Button>
-                                    <Button value={'Others'} style={getButtonStyle('Others')} onClick={() => handleGenderClick('Others')}>O</Button>
-                                </ButtonGroup>
-                            )}
-                        />
+                    <div>
+                        <FormControl fullWidth margin="normal" size="small">
+                            <InputLabel> Gender*</InputLabel>
+                            <Controller
+                                name=" Gender *"
+                                control={control}
+                                defaultValue=""
+                                render={({ field }) => (
+                                    <Select
+                                        sx={{ width: '250px' }}
+                                        {...field}
+                                        label="Gender*"
+                                    >
+                                        {gender?.map(option => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                )}
+                            />
+                        </FormControl>
                     </div>
 
 
@@ -376,9 +415,9 @@ const PatientRegistrationForm = () => {
                                     {...field}
                                     label="Marital Status "
                                 >
-                                    {genderOptions?.map(option => (
+                                    {maritalStatus?.map(option => (
                                         <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
+                                            {option.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -399,11 +438,11 @@ const PatientRegistrationForm = () => {
                                     {...field}
                                     label="Nationality"
                                 >
-                                    {genderOptions?.map(option => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
+
+                                    <MenuItem value={'india'}>
+                                        India
+                                    </MenuItem>
+
                                 </Select>
                             )}
                         />
@@ -422,9 +461,9 @@ const PatientRegistrationForm = () => {
                                     {...field}
                                     label="Blood  Group"
                                 >
-                                    {genderOptions?.map(option => (
+                                    {bloodGroup?.map(option => (
                                         <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
+                                            {option.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
