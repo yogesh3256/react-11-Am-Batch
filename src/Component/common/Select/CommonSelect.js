@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import { Controller } from 'react-hook-form';
 
-function CommonSelect({ name, control, label, fullWidth, value, options, onChange,placeholder,className,width }) {
+function CommonSelect({ name, control, label, fullWidth, value, options, onChange,placeholder,className,width,isClearable }) {
     return (
         <div style={{width:width  }}>
             {control ? (
@@ -19,7 +19,7 @@ function CommonSelect({ name, control, label, fullWidth, value, options, onChang
                             value={value}
                             onChange={(selectedOption) => field.onChange(selectedOption)}
                             placeholder={placeholder}
-                            isClearable
+                            isClearable={isClearable}
                             fullWidth
                         />
                     )}

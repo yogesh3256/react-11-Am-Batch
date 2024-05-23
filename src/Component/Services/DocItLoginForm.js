@@ -33,3 +33,15 @@ export const   isdCodeApi = async ()=>{
     return res.data
 }
 
+
+export const  countriApi = async ()=>{
+    let res= await axios.get('http://192.168.0.188:8080/countries')
+    return res.data
+}
+
+
+export const  stateApi = async ()=>{
+    let res= await axios.get('http://192.168.0.188:8080/countries')
+    return res.data
+}
+
