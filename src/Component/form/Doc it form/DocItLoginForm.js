@@ -26,8 +26,10 @@ const PatientRegistrationForm = () => {
     const [country, setCountry] = useState([])
     const [state, setState] = useState([])
     const [district, setDistrict] = useState([])
-    const [tal, setTal] = useState([])
-    console.log("tal", tal);
+    const [taluka, setTaluka] = useState([])
+    const [city, setCity] = useState([])
+
+
 
 
     const [genderName, setGenderName] = useState({})
@@ -37,8 +39,10 @@ const PatientRegistrationForm = () => {
     const [nationalityId, setNationalityId] = useState({})
     const [isdId, setIsdId] = useState({})
     const [countryId, setCountryId] = useState({})
+    const [stateId, setStateId] = useState({})
     const [districtId, setDistrictId] = useState({})
-    const [talId, setTalId] = useState({})
+    const [talukaId, setTalukaId] = useState({})
+
 
 
     const calculateAge = (dob, currentDate) => {
@@ -95,6 +99,29 @@ const PatientRegistrationForm = () => {
             mob: data?.mobileno,
 
         }
+        let cityObj = {
+            city_name: data?.City,
+
+            pin_code: data?.pincode,
+            taluka: {
+                id: talukaId?.id,
+                talukaName: talukaId.value,
+            },
+            districtTable: {
+                id: districtId?.id,
+                district_name: districtId?.value,
+            },
+            stateTable: {
+                id: stateId?.id,
+                state_name: stateId?.value,
+            },
+            countryTable: {
+                id: countryId?.id,
+                country_name: countryId?.value,
+
+            },
+
+        }
 
 
         axios.post(`${API_COMMON_URL}/registration/saveUser`, tempObj)
@@ -104,6 +131,15 @@ const PatientRegistrationForm = () => {
             .catch((err) => {
                 console.log(err)
             })
+
+        axios.post('http://192.168.0.188:8080/city', cityObj)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
 
 
         reset();
@@ -192,8 +228,8 @@ const PatientRegistrationForm = () => {
     }, [countryId])
 
     useEffect(() => {
-        if (districtId?.id) {
-            axios.get(`http://192.168.0.188:8080/fnDistrictDropdown/${districtId?.id}`)
+        if (stateId?.id) {
+            axios.get(`http://192.168.0.188:8080/fnDistrictDropdown/${stateId?.id}`)
                 .then((res) => {
                     setDistrict(res.data)
                 })
@@ -201,19 +237,32 @@ const PatientRegistrationForm = () => {
                     console.log(err)
                 })
         }
-    }, [districtId])
+    }, [stateId])
 
     useEffect(() => {
-        if (talId?.id) {
-            axios.get(`http://192.168.0.188:8080/getTalukaDropdown/${talId?.id}`)
+        if (districtId?.id) {
+            axios.get(`http://192.168.0.188:8080/getTalukaDropdown/${districtId?.id}`)
                 .then((res) => {
-                    setTal(res.data)
+                    setTaluka(res.data);
                 })
                 .catch((err) => {
-                    console.log(err)
-                })
+                    console.log(err);
+                });
         }
-    }, [talId])
+    }, [districtId]);
+
+    useEffect(() => {
+        if (talukaId?.id) {
+            axios.get(`http://192.168.0.188:8080/getCityDropdown/${talukaId?.id}`)
+                .then((res) => {
+                    setCity(res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [talukaId]);
+
 
     const handlePrefix = (value, id) => {
         setPrefixId({ value: value, id: id })
@@ -240,12 +289,16 @@ const PatientRegistrationForm = () => {
         setCountryId({ value: value, id: id })
     }
 
+    const handleState = (value, id) => {
+        setStateId({ value: value, id: id })
+    }
+
     const handleDistrict = (value, id) => {
         setDistrictId({ value: value, id: id })
     }
-
-    const handleTal = (value, id) => {
-        setTalId({ value: value, id: id })
+    const handleTaluka = (value, id) => {
+        setTalukaId({ value: value, id: id })
+        console.log(id);
     }
     return (
         <form className=' mx-10 border border-gray-800 p-4 shadow-md' onSubmit={handleSubmit(onSubmit)}>
@@ -727,7 +780,7 @@ const PatientRegistrationForm = () => {
                                         label="State*"
                                     >
                                         {state?.map(option => (
-                                            <MenuItem onClick={(() => { handleDistrict(option.value, option.id) })} key={option.value} value={option.value}>
+                                            <MenuItem onClick={(() => { handleState(option.value, option.id) })} key={option.value} value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -749,7 +802,7 @@ const PatientRegistrationForm = () => {
                                         label="District*"
                                     >
                                         {district?.map(option => (
-                                            <MenuItem key={option.value} value={option.value}>
+                                            <MenuItem onClick={(() => { handleDistrict(option.value, option.id) })} key={option.value} value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -770,8 +823,30 @@ const PatientRegistrationForm = () => {
                                         {...field}
                                         label="Taluka*"
                                     >
-                                        {tal?.map(option => (
-                                            <MenuItem onClick={(() => { handleTal(option.value, option.id) })} key={option.value} value={option.value}>
+                                        {taluka?.map(option => (
+                                            <MenuItem onClick={(() => { handleTaluka(option.value, option.id) })} key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                )}
+                            />
+                        </FormControl>
+                    </div>
+                    <div>
+                        <FormControl fullWidth margin="normal" size="small">
+                            <InputLabel>City *</InputLabel>
+                            <Controller
+                                name="City"
+                                control={control}
+                                defaultValue=""
+                                render={({ field }) => (
+                                    <Select
+                                        {...field}
+                                        label="City*"
+                                    >
+                                        {city?.map(option => (
+                                            <MenuItem key={option.value} value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -802,28 +877,7 @@ const PatientRegistrationForm = () => {
                             />
                         </FormControl>
                     </div>
-                    <div>
-                        <FormControl fullWidth margin="normal" size="small">
-                            <InputLabel>City *</InputLabel>
-                            <Controller
-                                name="City*"
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        label="City*"
-                                    >
-                                        {genderOptions?.map(option => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                )}
-                            />
-                        </FormControl>
-                    </div>
+
                     <div>
                         <Controller
                             name="pincode"
@@ -841,7 +895,7 @@ const PatientRegistrationForm = () => {
                             )}
                         />
                     </div>
-                   
+
 
 
                 </div>
