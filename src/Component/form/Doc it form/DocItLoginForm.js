@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useForm, Controller, set } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { FormControl, InputLabel, MenuItem, Select, TextField, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import dayjs from 'dayjs';
 import CommonButton from '../../common/Button/CommonButton';
 import axios from 'axios';
-import { bloodGroupApi, countriApi, genderApi, isdCodeApi, maritalStatusApi, nationalityApi, prefixApi, stateApi } from '../../Services/DocItLoginForm';
+import { bloodGroupApi, countriApi, genderApi, isdCodeApi, maritalStatusApi, nationalityApi, prefixApi,} from '../../Services/DocItLoginForm';
 import { API_COMMON_URL } from '../../../Http';
 
 const genderOptions = [
@@ -652,7 +652,7 @@ const PatientRegistrationForm = () => {
                         <div className='border '>
                             <img className='w-[160px]' src='https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg?w=740'
                                 alt='avatar' />
-                            <p className='text-center font-medium text-blue-600'>UPLOAD PROFILE</p>
+                            <p className='  font-medium text-blue-600 text-center'>UPLOAD PROFILE</p>
                         </div>
                     </div>
                     <div className='grid grid-cols-2 gap-2'>
@@ -758,7 +758,7 @@ const PatientRegistrationForm = () => {
                                         label="country*"
                                     >
                                         {country?.map(option => (
-                                            <MenuItem onClick={(() => { handleCountry(option.value, option.id) })} key={option.value} value={option.value}>
+                                            <MenuItem onClick={(() => { handleCountry(option.value, option.id) })}   value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -780,7 +780,7 @@ const PatientRegistrationForm = () => {
                                         label="State*"
                                     >
                                         {state?.map(option => (
-                                            <MenuItem onClick={(() => { handleState(option.value, option.id) })} key={option.value} value={option.value}>
+                                            <MenuItem onClick={(() => { handleState(option.value, option.id) })}   value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -802,7 +802,7 @@ const PatientRegistrationForm = () => {
                                         label="District*"
                                     >
                                         {district?.map(option => (
-                                            <MenuItem onClick={(() => { handleDistrict(option.value, option.id) })} key={option.value} value={option.value}>
+                                            <MenuItem onClick={(() => { handleDistrict(option.value, option.id) })}  value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -824,7 +824,7 @@ const PatientRegistrationForm = () => {
                                         label="Taluka*"
                                     >
                                         {taluka?.map(option => (
-                                            <MenuItem onClick={(() => { handleTaluka(option.value, option.id) })} key={option.value} value={option.value}>
+                                            <MenuItem onClick={(() => { handleTaluka(option.value, option.id) })}   value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -846,7 +846,7 @@ const PatientRegistrationForm = () => {
                                         label="City*"
                                     >
                                         {city?.map(option => (
-                                            <MenuItem key={option.value} value={option.value}>
+                                            <MenuItem   value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}

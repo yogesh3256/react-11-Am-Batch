@@ -55,6 +55,7 @@ import AxiosFetchApi from './Component/Axios/AxiosFetchApi';
 import DocItLoginForm from './Component/form/Doc it form/DocItLoginForm';
 import RowColSpanTable from './Component/task/table/RowColSpanTable';
 import DropDownTable from './Component/Dependant Dropdown/DropDownTable';
+import TableApi from './Component/task/table/TableApi';
 
 
  
@@ -170,8 +171,9 @@ function App() {
 
  {/* <AxiosFetchApi/> */}
  {/* <DocItLoginForm/> */}
- <RowColSpanTable/>
- {/* <DropDownTable/> */}
+ {/* <RowColSpanTable/> */}
+ <DropDownTable/>
+ {/* <TableApi/> */}
     </SnackbarProvider>
     </>
   )

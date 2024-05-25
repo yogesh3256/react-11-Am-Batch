@@ -1,25 +1,132 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal } from 'antd';
 import Box from '@mui/material/Box';
 import CommonSelect from '../common/Select/CommonSelect';
 import { useForm } from 'react-hook-form';
 import CommonTextField from '../common/TextField/CommonTextField';
 import CommonButton from '../common/Button/CommonButton';
-const weekDaysOptions = [
-    { id: 1, value: 'Monday', label: 'Monday' },
-    { id: 2, value: 'Tuesday', label: 'Tuesday' },
-    { id: 3, value: 'Wednesday', label: 'Wednesday' },
-    { id: 4, value: 'Thursday', label: 'Thursday' },
-    { id: 5, value: 'Friday', label: 'Friday' },
-    { id: 6, value: 'Saturday', label: 'Saturday' },
-    { id: 7, value: 'Sunday', label: 'Sunday' }
-];
+import { cityApi, countryApi, districtApi, stateApi, talukaApi } from '../Services/DepenDantDropDown';
+ 
+
 function DependantDropDown(props) {
-    const { handleSubmit, control } = useForm();
+    const { handleSubmit, control, watch, resetField } = useForm();
+    const [country, setCountry] = useState([]);
+    const [state, setState] = useState([]);
+    const [district, setDistrict] = useState([]);
+    const [taluka, setTaluka] = useState([]);
+    const [city, setCity] = useState([]);
 
     const onSubmit = (data) => {
-        console.log(data);
-    }
+        
+        console.log("data", data);
+    };
+
+    let CountryName = watch("country");
+    let stateName = watch("state");
+    let DistrictName = watch("district");
+    let TalukaName = watch("taluka");
+
+    useEffect(() => {
+        countryApi()
+            .then((res) => {
+                setCountry(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (CountryName) {
+            stateApi(CountryName)
+                .then((res) => {
+                    setState(res);
+                    // Reset the dependent dropdowns
+                    resetField("state");
+                    resetField("district");
+                    resetField("taluka");
+                    resetField("city");
+                    setDistrict([]);
+                    setTaluka([]);
+                    setCity([]);
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } else {
+            setState([]);
+            setDistrict([]);
+            setTaluka([]);
+            setCity([]);
+            resetField("state");
+            resetField("district");
+            resetField("taluka");
+            resetField("city");
+        }
+    }, [CountryName, resetField]);
+
+    useEffect(() => {
+        if (stateName) {
+            districtApi(stateName)
+                .then((res) => {
+                    setDistrict(res);
+                    // Reset the dependent dropdowns
+                    resetField("district");
+                    resetField("taluka");
+                    resetField("city");
+                    setTaluka([]);
+                    setCity([]);
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } else {
+            setDistrict([]);
+            setTaluka([]);
+            setCity([]);
+            resetField("district");
+            resetField("taluka");
+            resetField("city");
+        }
+    }, [stateName, resetField]);
+
+    useEffect(() => {
+        if (DistrictName) {
+            talukaApi(DistrictName)
+                .then((res) => {
+                    setTaluka(res);
+                    // Reset the dependent dropdowns
+                    resetField("taluka");
+                    resetField("city");
+                    setCity([]);
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } else {
+            setTaluka([]);
+            setCity([]);
+            resetField("taluka");
+            resetField("city");
+        }
+    }, [DistrictName, resetField]);
+
+    useEffect(() => {
+        if (TalukaName) {
+            cityApi(TalukaName)
+                .then((res) => {
+                    setCity(res);
+                    // Reset the dependent dropdown
+                    resetField("city");
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } else {
+            setCity([]);
+            resetField("city");
+        }
+    }, [TalukaName, resetField]);
 
     return (
         <div>
@@ -37,7 +144,7 @@ function DependantDropDown(props) {
                                     <CommonSelect
                                         name='country'
                                         control={control}
-                                        options={weekDaysOptions}
+                                        options={country}
                                         label="Country"
                                         isClearable={true}
                                         placeholder='Select the Country'
@@ -47,6 +154,7 @@ function DependantDropDown(props) {
                                     <CommonSelect
                                         name='state'
                                         control={control}
+                                        options={state}
                                         label="State"
                                         isClearable={true}
                                         placeholder='Select the State'
@@ -56,6 +164,7 @@ function DependantDropDown(props) {
                                     <CommonSelect
                                         name='district'
                                         control={control}
+                                        options={district}
                                         label="District"
                                         isClearable={true}
                                         placeholder='Select the District'
@@ -63,11 +172,12 @@ function DependantDropDown(props) {
                                 </div>
                                 <div>
                                     <CommonSelect
-                                        name='tal'
+                                        name='taluka'
                                         control={control}
-                                        label="Tal"
+                                        options={taluka}
+                                        label="Taluka"
                                         isClearable={true}
-                                        placeholder='Select the Tal'
+                                        placeholder='Select the Taluka'
                                     />
                                 </div>
                                 <div>
@@ -75,17 +185,18 @@ function DependantDropDown(props) {
                                         name='city'
                                         control={control}
                                         label="City"
+                                        options={city}
                                         isClearable={true}
                                         placeholder='Select the City'
                                     />
                                 </div>
                                 <div>
                                     <CommonTextField
-                                        name='textField'
+                                        name='pincode'
+                                        defaultValue=""
                                         control={control}
-                                        label="Text Field"
+                                        label="Pincode"
                                         size='small'
-                                        
                                         fullWidth={true}
                                     />
                                 </div>
@@ -93,8 +204,9 @@ function DependantDropDown(props) {
                             <div className='text-end mt-3'>
                                 <CommonButton
                                     label="Save"
-                                    type="submit"
-                                    className='bg-green-500 text-white w-16 '
+                                
+                                    type='submit'
+                                    className='bg-green-500 text-white w-16  font-bold'
                                 />
                             </div>
                         </form>
