@@ -8,51 +8,65 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
-const dataArray = [
-    { id: 1, firstName: 'John', lastName: 'Doe', age: 25, std: 'X', percentage: 85 },
-    { id: 2, firstName: 'Jane', lastName: 'Doe', age: 24, std: 'XI', percentage: 90 },
-    { id: 3, firstName: 'Alice', lastName: 'Smith', age: 22, std: 'X', percentage: 80 },
-    { id: 4, firstName: 'Bob', lastName: 'Johnson', age: 23, std: 'XII', percentage: 95 },
-    { id: 5, firstName: 'Emma', lastName: 'Brown', age: 21, std: 'XI', percentage: 88 },
-    { id: 6, firstName: 'Michael', lastName: 'Davis', age: 26, std: 'X', percentage: 75 },
-    { id: 7, firstName: 'Olivia', lastName: 'Wilson', age: 20, std: 'XII', percentage: 92 },
-    { id: 8, firstName: 'William', lastName: 'Martinez', age: 22, std: 'XI', percentage: 87 },
-    { id: 9, firstName: 'Sophia', lastName: 'Anderson', age: 24, std: 'X', percentage: 82 },
-    { id: 10, firstName: 'James', lastName: 'Taylor', age: 23, std: 'XII', percentage: 94 },
-    { id: 11, firstName: 'Isabella', lastName: 'Thomas', age: 21, std: 'XI', percentage: 89 },
-    { id: 12, firstName: 'Alexander', lastName: 'Harris', age: 25, std: 'X', percentage: 78 },
-    { id: 13, firstName: 'Mia', lastName: 'Clark', age: 22, std: 'XII', percentage: 91 },
-    { id: 14, firstName: 'Ethan', lastName: 'Lewis', age: 20, std: 'XI', percentage: 86 },
-    { id: 15, firstName: 'Ava', lastName: 'Lee', age: 24, std: 'X', percentage: 83 }
-];
+import CommonButton from '../../common/Button/CommonButton';
+import StudentModal from './StudentModal';
+
 
 function TableApi() {
-    const [data, setData] = useState(dataArray);
+    const [data, setData] = useState([]);
+    const [openStudentModal, setStudentModal] = useState(false)
+
+    const handleOpen = () => setStudentModal(true)
+    const handleClose = () => setStudentModal(false)
+
 
 
 
     useEffect(() => {
         axios.get('http://192.168.0.188:8080/StudentsList')
             .then((res) => {
-                
+                setData(res.data)
                 console.log(res.data);
             })
             .catch((err) => {
                 console.log(err);
             });
     }, []);
-    
-const handleDelete=(id)=>{
 
-    const Deleterow = data.filter((row)=>row.id !== id)
-    setData(Deleterow)
+    const handleDelete = (id) => {
+        axios.delete(`http://192.168.0.188:8080/StudentsList`)
 
 
-}
+    }
 
- 
+
     return (
         <div>
+            <div className='text-end m-5'>
+                <CommonButton
+                    label='+ADD STUDENT'
+                    className='bg-black text-white   w-36 py-2'
+                    type='button'
+                    onClick={handleOpen}
+
+
+                />
+            </div>
+            <div>
+
+                {
+                    openStudentModal &&
+                    <StudentModal
+                        open={openStudentModal}
+                        handleClose={handleClose}
+
+                    />
+                }
+            </div>
+
+
+
+
             {
                 data.length > 0 ?
                     (
@@ -78,7 +92,7 @@ const handleDelete=(id)=>{
                                                 <TableCell align="right">{item.std}</TableCell>
                                                 <TableCell align="right">{item.percentage}</TableCell>
                                                 <TableCell align="right">
-                                                    <DeleteIcon onClick={()=>{handleDelete(item.id)}} />
+                                                    <DeleteIcon onClick={() => { handleDelete(item.id) }} />
                                                 </TableCell>
                                             </TableRow>
                                         ))
@@ -91,6 +105,10 @@ const handleDelete=(id)=>{
                         <h1 className='text-center font-bold text-2xl'> NO record Found....</h1>
                     )
             }
+
+            <div>
+
+            </div>
         </div>
     );
 }

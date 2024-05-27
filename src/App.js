@@ -172,8 +172,8 @@ function App() {
  {/* <AxiosFetchApi/> */}
  {/* <DocItLoginForm/> */}
  {/* <RowColSpanTable/> */}
- <DropDownTable/>
- {/* <TableApi/> */}
+ {/* <DropDownTable/> */}
+ <TableApi/>
     </SnackbarProvider>
     </>
   )

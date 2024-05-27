@@ -2,18 +2,17 @@ import React from 'react';
 import { TextField } from '@mui/material';
 import { Controller } from 'react-hook-form';
 
-function CommonTextField({ name, control, size, fullWidth, label,defaultValue, value,onchange }) {
+function CommonTextField({ name, control, size, fullWidth, label, defaultValue, className }) {
     return (
         <Controller
             name={name}
-            onChange={onchange}
-            defaultValue={defaultValue}
             control={control}
-            value={value}
+            defaultValue={defaultValue}
             render={({ field }) => (
                 <TextField
                     {...field}
                     label={label}
+                    className={className}
                     size={size}
                     fullWidth={fullWidth}
                 />
