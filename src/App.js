@@ -56,6 +56,7 @@ import DocItLoginForm from './Component/form/Doc it form/DocItLoginForm';
 import RowColSpanTable from './Component/task/table/RowColSpanTable';
 import DropDownTable from './Component/Dependant Dropdown/DropDownTable';
 import TableApi from './Component/task/table/TableApi';
+import Hide_Passward from './Component/practice Task/HidepassWord/Hide_Passward';
 
 
  
@@ -147,8 +148,8 @@ function App() {
 {/* <UseReducerForm/> */}
       {/* <Input/> */}
 
-
-
+{/* practice Task */}
+<Hide_Passward/>
 
       {/* <Todoapp/> */}
       {/* <Dropdown/> */}
@@ -173,7 +174,7 @@ function App() {
  {/* <DocItLoginForm/> */}
  {/* <RowColSpanTable/> */}
  {/* <DropDownTable/> */}
- <TableApi/>
+ {/* <TableApi/> */}
     </SnackbarProvider>
     </>
   )

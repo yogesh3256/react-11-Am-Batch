@@ -1,32 +1,22 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import { Modal } from 'antd';
 import { useForm } from 'react-hook-form';
 import CommonButton from '../../common/Button/CommonButton';
 import axios from 'axios';
 import CommonTextField from '../../common/TextField/CommonTextField';
+import { CloseOutlined } from '@ant-design/icons';
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 1000,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
-
+ 
 function StudentModal(props) {
-    const { control, reset, handleSubmit } = useForm()
+    const { control, reset, handleSubmit } = useForm();
 
     const onSubmit = (data) => {
         const tempObj = {
             firstName: data?.firstname,
             lastName: data?.lastname,
             age: data?.age,
-            std: data.standard,
+            std: data?.standard,
             percentage: data?.percentage
         };
 
@@ -39,91 +29,90 @@ function StudentModal(props) {
             })
             .catch((err) => {
                 console.log(err);
-            })
+            });
 
         reset();
-        props.handleClose()
+        props.handleClose();
     };
 
     return (
-        <div>
-            <Modal
-                open={props.open}
-                onClose={props.handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={style}>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className='grid grid-cols-3 gap-4'>
-                            <div>
-                                <CommonTextField
-                                    name='firstname'
-                                    type='text'
-                                    defaultValue=''
-                                    control={control}
-
-                                    label='First Name'
-                                    size='small'
-                                    fullWidth={true}
-                                />
-                            </div>
-                            <div>
-                                <CommonTextField
-                                    name='lastname'
-                                    control={control}
-                                    defaultValue=''
-                                    label='Last Name'
-                                    size='small'
-                                    type='text'
-                                    fullWidth={true}
-                                />
-                            </div>
-                            <div>
-                                <CommonTextField
-                                    name='age'
-                                    control={control}
-                                    defaultValue=''
-                                    label='Age'
-                                    size='small'
-                                    type='text'
-                                    fullWidth={true}
-                                />
-                            </div>
-                            <div>
-                                <CommonTextField
-                                    name='standard'
-                                    control={control}
-                                    defaultValue=''
-                                    label='Standard'
-                                    size='small'
-                                    type='text'
-                                    fullWidth={true}
-                                />
-                            </div>
-                            <div>
-                                <CommonTextField
-                                    name='percentage'
-                                    control={control}
-                                    defaultValue=''
-                                    label='Percentage'
-                                    size='small'
-                                    type='text'
-                                    fullWidth={true}
-                                />
-                            </div>
-                        </div>
-                        <div className='text-end mt-3'>
-                            <CommonButton
-                                label='Save'
-                                type='submit'
-                                className='bg-green-500 text-white px-4 font-semibold'
+        <Modal
+            open={props.open}
+            onCancel={props.handleClose}
+            footer={null}
+            centered
+            closeIcon={<CloseOutlined style={{ color: 'red', fontSize: '16px',border:'1px solid red', borderRadius:'5px' ,padding: '5px' }} />}
+            width={1000}
+        >
+            <Box >
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className='grid grid-cols-3 gap-4 mt-8'>
+                        <div>
+                            <CommonTextField
+                                name='firstname'
+                                type='text'
+                                defaultValue=''
+                                control={control}
+                                label='First Name'
+                                size='small'
+                                fullWidth
                             />
                         </div>
-                    </form>
-                </Box>
-            </Modal>
-        </div>
+                        <div>
+                            <CommonTextField
+                                name='lastname'
+                                control={control}
+                                defaultValue=''
+                                label='Last Name'
+                                size='small'
+                                type='text'
+                                fullWidth
+                            />
+                        </div>
+                        <div>
+                            <CommonTextField
+                                name='age'
+                                control={control}
+                                defaultValue=''
+                                label='Age'
+                                size='small'
+                                type='text'
+                                fullWidth
+                            />
+                        </div>
+                        <div>
+                            <CommonTextField
+                                name='standard'
+                                control={control}
+                                defaultValue=''
+                                label='Standard'
+                                size='small'
+                                type='text'
+                                fullWidth
+                            />
+                        </div>
+                        <div>
+                            <CommonTextField
+                                name='percentage'
+                                control={control}
+                                defaultValue=''
+                                label='Percentage'
+                                size='small'
+                                type='text'
+                                fullWidth
+                            />
+                        </div>
+                    </div>
+                    <div className='text-end mt-3'>
+                        <CommonButton
+                            label='Save'
+                            type='submit'
+                            className='bg-green-500 text-white px-4 font-semibold'
+                        />
+                    </div>
+                </form>
+            </Box>
+        </Modal>
     );
 }
 
