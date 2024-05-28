@@ -23,22 +23,32 @@ function TableApi() {
 
 
     useEffect(() => {
-        axios.get('http://192.168.0.188:8080/StudentsList')
-            .then((res) => {
-                setData(res.data)
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        getStudentdata()
     }, []);
-
-    const handleDelete = (id) => {
-        axios.delete(`http://192.168.0.188:8080/StudentsList`)
-
-
+    const getStudentdata =()=>{
+        axios.get('http://192.168.52.12:8080/StudentsList')
+        .then((res) => {
+            setData(res.data)
+            console.log(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     }
 
+  const handleDelete = (id) => {
+        axios.delete(`http://192.168.52.12:8080/deleteStudent/${id}`)
+        .then((res)=>{
+            setData(res.data)
+            getStudentdata()
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+       
+    }
+
+  
 
     return (
         <div>
@@ -59,6 +69,7 @@ function TableApi() {
                     <StudentModal
                         open={openStudentModal}
                         handleClose={handleClose}
+                        getStudentdata={getStudentdata}
 
                     />
                 }
@@ -92,7 +103,7 @@ function TableApi() {
                                                 <TableCell align="right">{item.std}</TableCell>
                                                 <TableCell align="right">{item.percentage}</TableCell>
                                                 <TableCell align="right">
-                                                    <DeleteIcon onClick={() => { handleDelete(item.id) }} />
+                                                    <DeleteIcon onClick={()=>{handleDelete(item?.id)}}/>
                                                 </TableCell>
                                             </TableRow>
                                         ))

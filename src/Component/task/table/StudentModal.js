@@ -19,36 +19,30 @@ const style = {
 };
 
 function StudentModal(props) {
-    const { control, reset, handleSubmit } = useForm({
-        defaultValues: {
-            firstname: '',
-            lastname: '',
-            age: '',
-            standard: '',
-            percentage: '',
-        }
-    });
+    const { control, reset, handleSubmit } = useForm()
 
     const onSubmit = (data) => {
         const tempObj = {
-            firstName: data.firstname,
-            lastName: data.lastname,
-            age: parseInt(data.age, 10),  // Convert string to number
+            firstName: data?.firstname,
+            lastName: data?.lastname,
+            age: data?.age,
             std: data.standard,
-            percentage: parseFloat(data.percentage)  // Convert string to number
+            percentage: data?.percentage
         };
-        console.log("object", tempObj);
 
-        axios.post('http://192.168.0.188:8080/student', tempObj)
+        console.log("object to be sent", tempObj);
+
+        axios.post('http://192.168.52.12:8080/student/save', tempObj)
             .then((res) => {
                 console.log(res.data);
-                props.handleClose();  // Close modal after successful submission
+                props.getStudentdata();
             })
             .catch((err) => {
-                console.error(err);
-            });
+                console.log(err);
+            })
 
         reset();
+        props.handleClose()
     };
 
     return (
@@ -65,7 +59,10 @@ function StudentModal(props) {
                             <div>
                                 <CommonTextField
                                     name='firstname'
+                                    type='text'
+                                    defaultValue=''
                                     control={control}
+
                                     label='First Name'
                                     size='small'
                                     fullWidth={true}
@@ -75,8 +72,10 @@ function StudentModal(props) {
                                 <CommonTextField
                                     name='lastname'
                                     control={control}
+                                    defaultValue=''
                                     label='Last Name'
                                     size='small'
+                                    type='text'
                                     fullWidth={true}
                                 />
                             </div>
@@ -84,8 +83,10 @@ function StudentModal(props) {
                                 <CommonTextField
                                     name='age'
                                     control={control}
+                                    defaultValue=''
                                     label='Age'
                                     size='small'
+                                    type='text'
                                     fullWidth={true}
                                 />
                             </div>
@@ -93,8 +94,10 @@ function StudentModal(props) {
                                 <CommonTextField
                                     name='standard'
                                     control={control}
+                                    defaultValue=''
                                     label='Standard'
                                     size='small'
+                                    type='text'
                                     fullWidth={true}
                                 />
                             </div>
@@ -102,8 +105,10 @@ function StudentModal(props) {
                                 <CommonTextField
                                     name='percentage'
                                     control={control}
+                                    defaultValue=''
                                     label='Percentage'
                                     size='small'
+                                    type='text'
                                     fullWidth={true}
                                 />
                             </div>
