@@ -8,76 +8,80 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import CommonButton from '../../common/Button/CommonButton';
 import StudentModal from './StudentModal';
-
+import { API_COMMON_URL } from '../../../Http';
 
 function TableApi() {
     const [data, setData] = useState([]);
-    const [openStudentModal, setStudentModal] = useState(false)
+    const [openStudentModal, setStudentModal] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [selectedId, setSelectedId] = useState(null);
 
-    const handleOpen = () => setStudentModal(true)
-    const handleClose = () => setStudentModal(false)
-
-
-
+    const handleOpen = () => setStudentModal(true);
+    const handleClose = () => {
+        setStudentModal(false);
+        setSelectedRow(null);
+         
+    };
 
     useEffect(() => {
-        getStudentdata()
+        getStudentdata();
     }, []);
-    const getStudentdata =()=>{
-        axios.get('http://192.168.52.12:8080/StudentsList')
-        .then((res) => {
-            setData(res.data)
-            console.log(res.data);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    }
 
-  const handleDelete = (id) => {
-        axios.delete(`http://192.168.52.12:8080/deleteStudent/${id}`)
-        .then((res)=>{
-            setData(res.data)
-            getStudentdata()
-        })
-        .catch((err)=>{
-            console.log(err);
-        })
-       
-    }
+    const getStudentdata = () => {
+        axios.get(`${API_COMMON_URL}/StudentsList`)
+            .then((res) => {
+                setData(res.data);
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
-  
+    const handleDelete = (id) => {
+        axios.delete(`${API_COMMON_URL}/deleteStudent/${id}`)
+            .then((res) => {
+                setData(res.data);
+                getStudentdata();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    const handleEdit = (row) => {
+        setSelectedRow(row);
+        setSelectedId(row.id);
+        console.log("rowId",row.id);
+        handleOpen();
+    };
 
     return (
         <div>
             <div className='text-end m-5'>
                 <CommonButton
                     label='+ADD STUDENT'
-                    className='bg-black text-white   w-36 py-2'
+                    className='bg-black text-white w-36 py-2'
                     type='button'
                     onClick={handleOpen}
-
-
                 />
             </div>
             <div>
-
                 {
                     openStudentModal &&
                     <StudentModal
                         open={openStudentModal}
                         handleClose={handleClose}
                         getStudentdata={getStudentdata}
-
+                        selectedRow={selectedRow}
+                        selectedId={selectedId}
+                        setSelectedId={setSelectedId}
                     />
                 }
             </div>
-
-
-
-
             {
                 data.length > 0 ?
                     (
@@ -85,11 +89,11 @@ function TableApi() {
                             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                                 <TableHead>
                                     <TableRow className='bg-gray-200'>
-                                        <TableCell>firstName</TableCell>
-                                        <TableCell align="right">lastName</TableCell>
-                                        <TableCell align="right">age</TableCell>
-                                        <TableCell align="right">std</TableCell>
-                                        <TableCell align="right">percentage</TableCell>
+                                        <TableCell>First Name</TableCell>
+                                        <TableCell align="right">Last Name</TableCell>
+                                        <TableCell align="right">Age</TableCell>
+                                        <TableCell align="right">Standard</TableCell>
+                                        <TableCell align="right">Percentage</TableCell>
                                         <TableCell align="right">Actions</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -103,7 +107,10 @@ function TableApi() {
                                                 <TableCell align="right">{item.std}</TableCell>
                                                 <TableCell align="right">{item.percentage}</TableCell>
                                                 <TableCell align="right">
-                                                    <DeleteIcon onClick={()=>{handleDelete(item?.id)}}/>
+                                                    <div>
+                                                        <EditIcon onClick={() => handleEdit(item)} />
+                                                        <DeleteIcon onClick={() => handleDelete(item.id)} />
+                                                    </div>
                                                 </TableCell>
                                             </TableRow>
                                         ))
@@ -116,10 +123,6 @@ function TableApi() {
                         <h1 className='text-center font-bold text-2xl'> NO record Found....</h1>
                     )
             }
-
-            <div>
-
-            </div>
         </div>
     );
 }

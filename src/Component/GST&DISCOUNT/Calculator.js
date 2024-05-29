@@ -21,7 +21,7 @@ const style = {
     borderRadius: '10px',
 };
 
-function Calculator(props) {
+function    Calculator(props) {
     const schema = yup.object({
         ItemName: yup.string().required(),
         qty: yup.number().positive().integer().required(),

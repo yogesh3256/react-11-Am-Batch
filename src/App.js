@@ -57,6 +57,8 @@ import RowColSpanTable from './Component/task/table/RowColSpanTable';
 import DropDownTable from './Component/Dependant Dropdown/DropDownTable';
 import TableApi from './Component/task/table/TableApi';
 import Hide_Passward from './Component/practice Task/HidepassWord/Hide_Passward';
+import StudentModal from './Component/task/table/StudentModal';
+import UseFieldArrayForm from './Component/hookform/useFieldArray/UseFieldArrayForm';
 
 
  
@@ -149,7 +151,7 @@ function App() {
       {/* <Input/> */}
 
 {/* practice Task */}
-<Hide_Passward/>
+{/* <Hide_Passward/> */}
 
       {/* <Todoapp/> */}
       {/* <Dropdown/> */}
@@ -163,6 +165,7 @@ function App() {
  {/* <ModalAdd/> */}
 {/* 
  <ParrentTab/> */}
+ {/* <UseFieldArrayForm/> */}
 
 
  {/* <DateTaskForm/> */}
@@ -174,7 +177,8 @@ function App() {
  {/* <DocItLoginForm/> */}
  {/* <RowColSpanTable/> */}
  {/* <DropDownTable/> */}
- {/* <TableApi/> */}
+ <TableApi/>
+  
     </SnackbarProvider>
     </>
   )

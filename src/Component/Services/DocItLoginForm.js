@@ -35,7 +35,7 @@ export const   isdCodeApi = async ()=>{
 
 
 export const  countriApi = async ()=>{
-    let res= await axios.get('http://192.168.0.188:8080/countries')
+    let res= await axios.get(`${API_COMMON_URL}/countries`)
     return res.data
 }
 

@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import dayjs from 'dayjs';
 import CommonButton from '../../common/Button/CommonButton';
 import axios from 'axios';
-import { bloodGroupApi, countriApi, genderApi, isdCodeApi, maritalStatusApi, nationalityApi, prefixApi,} from '../../Services/DocItLoginForm';
+import { bloodGroupApi, countriApi, genderApi, isdCodeApi, maritalStatusApi, nationalityApi, prefixApi, } from '../../Services/DocItLoginForm';
 import { API_COMMON_URL } from '../../../Http';
 
 const genderOptions = [
@@ -42,6 +42,7 @@ const PatientRegistrationForm = () => {
     const [stateId, setStateId] = useState({})
     const [districtId, setDistrictId] = useState({})
     const [talukaId, setTalukaId] = useState({})
+    const [cityId, setCityId] = useState({})
 
 
 
@@ -88,40 +89,38 @@ const PatientRegistrationForm = () => {
                 id: bloodGroupId?.id,
                 bloodGroup: bloodGroupId?.value
             },
-            maritalStatusId: {
+            maritalStatus: {
                 id: marital?.id,
                 maritalStatus: marital?.value
-
+            },
+            city: {
+                id: cityId?.id,
+                city_name: cityId?.value,
+                pin_code: data?.pincode,
+                taluka: {
+                    id: talukaId?.id,
+                    talukaName: talukaId?.value,
+                    districtTable: {
+                        id: districtId?.id,
+                        district_name: districtId?.value,
+                        stateTable: {
+                            id: stateId?.id,
+                            state_name: stateId?.value,
+                            countryTable: {
+                                id: countryId?.id,
+                                country_name: countryId?.value,
+                            }
+                        }
+                    }
+                }
             },
             fname: data?.firstname,
             mname: data?.middleName,
             lname: data?.lastname,
             mob: data?.mobileno,
+        };
+console.log("tempObj",tempObj);
 
-        }
-        let cityObj = {
-            city_name: data?.City,
-
-            pin_code: data?.pincode,
-            taluka: {
-                id: talukaId?.id,
-                talukaName: talukaId.value,
-            },
-            districtTable: {
-                id: districtId?.id,
-                district_name: districtId?.value,
-            },
-            stateTable: {
-                id: stateId?.id,
-                state_name: stateId?.value,
-            },
-            countryTable: {
-                id: countryId?.id,
-                country_name: countryId?.value,
-
-            },
-
-        }
 
 
         axios.post(`${API_COMMON_URL}/registration/saveUser`, tempObj)
@@ -132,13 +131,7 @@ const PatientRegistrationForm = () => {
                 console.log(err)
             })
 
-        axios.post('http://192.168.0.188:8080/city', cityObj)
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+
 
 
 
@@ -217,7 +210,7 @@ const PatientRegistrationForm = () => {
 
     useEffect(() => {
         if (countryId?.id) {
-            axios.get(`http://192.168.0.188:8080/fn_state_dropdown/${countryId?.id}`)
+            axios.get(`${API_COMMON_URL}/fn_state_dropdown/${countryId?.id}`)
                 .then((res) => {
                     setState(res.data)
                 })
@@ -229,7 +222,7 @@ const PatientRegistrationForm = () => {
 
     useEffect(() => {
         if (stateId?.id) {
-            axios.get(`http://192.168.0.188:8080/fnDistrictDropdown/${stateId?.id}`)
+            axios.get(`${API_COMMON_URL}/fnDistrictDropdown/${stateId?.id}`)
                 .then((res) => {
                     setDistrict(res.data)
                 })
@@ -241,7 +234,7 @@ const PatientRegistrationForm = () => {
 
     useEffect(() => {
         if (districtId?.id) {
-            axios.get(`http://192.168.0.188:8080/getTalukaDropdown/${districtId?.id}`)
+            axios.get(`${API_COMMON_URL}/getTalukaDropdown/${districtId?.id}`)
                 .then((res) => {
                     setTaluka(res.data);
                 })
@@ -253,7 +246,7 @@ const PatientRegistrationForm = () => {
 
     useEffect(() => {
         if (talukaId?.id) {
-            axios.get(`http://192.168.0.188:8080/getCityDropdown/${talukaId?.id}`)
+            axios.get(`${API_COMMON_URL}/getCityDropdown/${talukaId?.id}`)
                 .then((res) => {
                     setCity(res.data);
                 })
@@ -298,7 +291,11 @@ const PatientRegistrationForm = () => {
     }
     const handleTaluka = (value, id) => {
         setTalukaId({ value: value, id: id })
-        console.log(id);
+       
+    }
+    const handleCity = (value, id) => {
+        setCityId({ value: value, id: id })
+        
     }
     return (
         <form className=' mx-10 border border-gray-800 p-4 shadow-md' onSubmit={handleSubmit(onSubmit)}>
@@ -758,7 +755,7 @@ const PatientRegistrationForm = () => {
                                         label="country*"
                                     >
                                         {country?.map(option => (
-                                            <MenuItem onClick={(() => { handleCountry(option.value, option.id) })}   value={option.value}>
+                                            <MenuItem onClick={(() => { handleCountry(option.value, option.id) })} value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -780,7 +777,7 @@ const PatientRegistrationForm = () => {
                                         label="State*"
                                     >
                                         {state?.map(option => (
-                                            <MenuItem onClick={(() => { handleState(option.value, option.id) })}   value={option.value}>
+                                            <MenuItem onClick={(() => { handleState(option.value, option.id) })} value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -802,7 +799,7 @@ const PatientRegistrationForm = () => {
                                         label="District*"
                                     >
                                         {district?.map(option => (
-                                            <MenuItem onClick={(() => { handleDistrict(option.value, option.id) })}  value={option.value}>
+                                            <MenuItem onClick={(() => { handleDistrict(option.value, option.id) })} value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -824,7 +821,7 @@ const PatientRegistrationForm = () => {
                                         label="Taluka*"
                                     >
                                         {taluka?.map(option => (
-                                            <MenuItem onClick={(() => { handleTaluka(option.value, option.id) })}   value={option.value}>
+                                            <MenuItem onClick={(() => { handleTaluka(option.value, option.id) })} value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
@@ -846,7 +843,7 @@ const PatientRegistrationForm = () => {
                                         label="City*"
                                     >
                                         {city?.map(option => (
-                                            <MenuItem   value={option.value}>
+                                            <MenuItem onClick={(() => { handleCity(option.value, option.id) })} value={option.value}>
                                                 {option.label}
                                             </MenuItem>
                                         ))}
