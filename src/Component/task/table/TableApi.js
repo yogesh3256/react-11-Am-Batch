@@ -23,7 +23,7 @@ function TableApi() {
     const handleClose = () => {
         setStudentModal(false);
         setSelectedRow(null);
-         
+
     };
 
     useEffect(() => {
@@ -42,20 +42,23 @@ function TableApi() {
     };
 
     const handleDelete = (id) => {
-        axios.delete(`${API_COMMON_URL}/deleteStudent/${id}`)
-            .then((res) => {
-                setData(res.data);
-                getStudentdata();
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        if (window.confirm("Are you sure you want to delete this student?")) {
+            axios.delete(`${API_COMMON_URL}/deleteStudent/${id}`)
+                .then((res) => {
+                    setData(res.data);
+                    getStudentdata();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     };
+
 
     const handleEdit = (row) => {
         setSelectedRow(row);
         setSelectedId(row.id);
-        console.log("rowId",row.id);
+        console.log("rowId", row.id);
         handleOpen();
     };
 
@@ -101,7 +104,7 @@ function TableApi() {
                                     {
                                         data.map((item) => (
                                             <TableRow key={item.id}>
-                                                <TableCell component="th" scope="row">{item.firstName}</TableCell>
+                                                <TableCell component="th">{item.firstName}</TableCell>
                                                 <TableCell align="right">{item.lastName}</TableCell>
                                                 <TableCell align="right">{item.age}</TableCell>
                                                 <TableCell align="right">{item.std}</TableCell>
