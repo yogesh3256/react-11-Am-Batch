@@ -158,8 +158,8 @@ function App() {
       {/* <Dropdown/> */}
 
 {/* <Form/>   */}
-{/* <Task/>    `` */}
-{/* <ParrentComponent/> */}
+{/* <Task/>     */}
+<ParrentComponent/>
 {/* <CommonTable/>       */}
  {/* <ItemMaster/> */}
  {/* <Navbar/> */}
@@ -178,7 +178,7 @@ function App() {
  {/* <DocItLoginForm/> */}
  {/* <RowColSpanTable/> */}
  {/* <DropDownTable/> */}
- <TableApi/>
+ {/* <TableApi/> */}
  {/* <HookFormTAsk/> */}
   
     </SnackbarProvider>

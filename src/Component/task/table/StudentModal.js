@@ -21,7 +21,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow, selected
             setValue('age', selectedRow.age);
             setValue('standard', selectedRow.std);
             setValue('percentage', selectedRow.percentage);
-            setSelectedId(selectedRow.id);  // Ensure selectedId is set when a row is selected
+            setSelectedId(selectedRow.id); 
         } else {
             reset();
         }

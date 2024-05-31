@@ -29,7 +29,7 @@ export default function ChildComponent(props) {
         .object({
             firstName: yup.string().required('Please Enter the FirstName'),
             middleName: yup.string().required('Please Enter the   middleName'),
-            lastName: yup.string().required('Please Enter the FirstName'),
+            lastName: yup.string().required('Please Enter the  LastName'),
             address: yup.string().required('Please Enter the Address'),
             // age: yup.number().positive().integer().required(),
         })

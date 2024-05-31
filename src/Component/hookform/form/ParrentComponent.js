@@ -18,10 +18,12 @@ function ParrentComponemt() {
     const [openChildComponent, setOpenChildComponent] = useState(false);
 
     const handleDelete = (index) => {
-        alert("are sure to delete the row...")
-        const updatedTableData = [...tableData];
-        updatedTableData.splice(index, 1);
-        setTableData(updatedTableData);
+        if (window.confirm("Are You Sure To Delete This Data....")) {
+            const updatedTableData = [...tableData];
+            updatedTableData.splice(index, 1);
+            setTableData(updatedTableData);
+        }
+
     };
 
     return (
