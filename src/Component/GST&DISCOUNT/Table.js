@@ -19,10 +19,12 @@ function CommonTable() {
     const [openChildComponent, setOpenChildComponent] = useState(false);
 
     const handleDelete = (index) => {
-        alert("are sure to delete the row...")
-        const updatedTableData = [...tableData];
-        updatedTableData.splice(index, 1);
-        setTableData(updatedTableData);
+
+        if (window.confirm("Are you sure you want to delete this record?")) {
+            const updatedTableData = [...tableData];
+            updatedTableData.splice(index, 1);
+            setTableData(updatedTableData);
+        }
     };
 
     return (

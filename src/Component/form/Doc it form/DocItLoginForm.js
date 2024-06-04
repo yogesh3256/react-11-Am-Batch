@@ -93,27 +93,27 @@ const PatientRegistrationForm = () => {
                 id: marital?.id,
                 maritalStatus: marital?.value
             },
-            city: {
-                id: cityId?.id,
-                city_name: cityId?.value,
-                pin_code: data?.pincode,
-                taluka: {
-                    id: talukaId?.id,
-                    talukaName: talukaId?.value,
-                    districtTable: {
-                        id: districtId?.id,
-                        district_name: districtId?.value,
-                        stateTable: {
-                            id: stateId?.id,
-                            state_name: stateId?.value,
-                            countryTable: {
-                                id: countryId?.id,
-                                country_name: countryId?.value,
-                            }
-                        }
-                    }
-                }
-            },
+            // city: {
+            //     id: cityId?.id,
+            //     city_name: cityId?.value,
+            //     pin_code: data?.pincode,
+            //     taluka: {
+            //         id: talukaId?.id,
+            //         talukaName: talukaId?.value,
+            //         districtTable: {
+            //             id: districtId?.id,
+            //             district_name: districtId?.value,
+            //             stateTable: {
+            //                 id: stateId?.id,
+            //                 state_name: stateId?.value,
+            //                 countryTable: {
+            //                     id: countryId?.id,
+            //                     country_name: countryId?.value,
+            //                 }
+            //             }
+            //         }
+            //     }
+            // },
             fname: data?.firstname,
             mname: data?.middleName,
             lname: data?.lastname,
@@ -705,7 +705,7 @@ console.log("tempObj",tempObj);
                 </div>
             </div>
             <hr className="border-none mt-4 h-[1px] bg-black" />
-            <div>
+            {/* <div>
                 <h1 className='font-bold mt-3'> Address Details</h1>
                 <div className='grid grid-cols-4 gap-2'>
                     <div>
@@ -897,10 +897,10 @@ console.log("tempObj",tempObj);
 
                 </div>
 
-            </div>
+            </div> */}
 
 
-            <div className='text-center'>
+            <div className='text-center mt-3'>
                 <CommonButton
                     label='Submit'
                     type='submit'

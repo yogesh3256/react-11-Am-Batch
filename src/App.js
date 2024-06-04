@@ -159,7 +159,7 @@ function App() {
 
 {/* <Form/>   */}
 {/* <Task/>     */}
-<ParrentComponent/>
+{/* <ParrentComponent/> */}
 {/* <CommonTable/>       */}
  {/* <ItemMaster/> */}
  {/* <Navbar/> */}
@@ -175,7 +175,7 @@ function App() {
  {/* <Time/> */}
 
  {/* <AxiosFetchApi/> */}
- {/* <DocItLoginForm/> */}
+ <DocItLoginForm/>
  {/* <RowColSpanTable/> */}
  {/* <DropDownTable/> */}
  {/* <TableApi/> */}
