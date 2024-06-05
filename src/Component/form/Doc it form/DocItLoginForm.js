@@ -3,6 +3,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { FormControl, InputLabel, MenuItem, Select, TextField, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import dayjs from 'dayjs';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import CommonButton from '../../common/Button/CommonButton';
 import axios from 'axios';
 import { bloodGroupApi, countriApi, genderApi, isdCodeApi, maritalStatusApi, nationalityApi, prefixApi, } from '../../Services/DocItLoginForm';
@@ -14,8 +16,9 @@ const genderOptions = [
     { value: 'other', label: 'Other' }
 ];
 
+
 const PatientRegistrationForm = () => {
-    const { control, handleSubmit, watch, reset } = useForm();
+
     const [ageData, setAgeData] = useState({ age: 0, years: 0, months: 0, days: 0 })
     const [prefix, setPrefix] = useState([])
     const [maritalStatus, setMaritalStatus] = useState([])
@@ -28,13 +31,12 @@ const PatientRegistrationForm = () => {
     const [district, setDistrict] = useState([])
     const [taluka, setTaluka] = useState([])
     const [city, setCity] = useState([])
-
-
-
-
+    const [image, setImage] = useState(null);
+    // id and values
     const [genderName, setGenderName] = useState({})
     const [prefixId, setPrefixId] = useState({})
     const [marital, setMarital] = useState({})
+
     const [bloodGroupId, setBloodGroupId] = useState({})
     const [nationalityId, setNationalityId] = useState({})
     const [isdId, setIsdId] = useState({})
@@ -43,8 +45,27 @@ const PatientRegistrationForm = () => {
     const [districtId, setDistrictId] = useState({})
     const [talukaId, setTalukaId] = useState({})
     const [cityId, setCityId] = useState({})
+    //  
+    const schema = yup.object().shape({
 
+        Prefix: yup.string().required(),
+        firstname: yup.string().required(),
+        middleName: yup.string().required(),
+        lastname: yup.string().required(),
+        dateofbirth: yup.date().required(),
+        isdcode: yup.string().required(),
+        mobileno: yup.string().required(),
+        email: yup.string().email().required(),
+        maritalStatus: yup.string().required(),
+        registrationdate: yup.date().required(),
+        genderValue: yup.string().required(),
+        nationality: yup.string().required(),
+        bloodgroup: yup.string().required()
 
+    });
+    const { control, handleSubmit, watch, reset, formState: { errors } } = useForm(
+        { resolver: yupResolver(schema), }
+    );
 
     const calculateAge = (dob, currentDate) => {
         const birthDate = dayjs(dob);
@@ -64,14 +85,28 @@ const PatientRegistrationForm = () => {
         }
     }, [dateOfBirth]);
 
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+
     const onSubmit = (data) => {
         let tempObj = {
             email: data?.email,
             dob: data?.dateofbirth,
             age: data?.age,
+            registrationDate: data?.registrationdate,
             prefix: {
                 id: prefixId?.id,
-                prefix: prefixId.value
+                prefixName: prefixId.value
             },
             gender: {
                 id: genderName?.id,
@@ -79,19 +114,19 @@ const PatientRegistrationForm = () => {
             },
             isdCode: {
                 id: isdId?.id,
-                isdCode: isdId?.value
+                isdCodeCode: isdId?.value
             },
             nationality: {
                 id: nationalityId?.id,
-                nationality: nationalityId?.value
+                nationalityName: nationalityId?.value
             },
             bloodGroup: {
                 id: bloodGroupId?.id,
-                bloodGroup: bloodGroupId?.value
+                bloodGroupName: bloodGroupId?.value
             },
-            maritalStatus: {
+            maritalStatusId: {
                 id: marital?.id,
-                maritalStatus: marital?.value
+                maritalStatusName: marital?.value
             },
             // city: {
             //     id: cityId?.id,
@@ -119,7 +154,7 @@ const PatientRegistrationForm = () => {
             lname: data?.lastname,
             mob: data?.mobileno,
         };
-console.log("tempObj",tempObj);
+        console.log("tempObj", tempObj);
 
 
 
@@ -134,7 +169,7 @@ console.log("tempObj",tempObj);
 
 
 
-
+        setAgeData({ age: 0, years: 0, months: 0, days: 0 });
         reset();
 
 
@@ -267,6 +302,7 @@ console.log("tempObj",tempObj);
     }
     const handlemarital = (value, id) => {
         setMarital({ value: value, id: id })
+
     }
     const handleBloodGroup = (value, id) => {
         setBloodGroupId({ value: value, id: id })
@@ -291,352 +327,410 @@ console.log("tempObj",tempObj);
     }
     const handleTaluka = (value, id) => {
         setTalukaId({ value: value, id: id })
-       
+
     }
     const handleCity = (value, id) => {
         setCityId({ value: value, id: id })
-        
+
     }
     return (
         <form className=' mx-10 border border-gray-800 p-4 shadow-md' onSubmit={handleSubmit(onSubmit)}>
-            <h1 className='font-bold'>Patient Basic Information</h1>
-            <div className='grid grid-cols-3 gap-3 '>
-                <div>
-                    <div>
-                        <Controller
-                            name="patientname"
-                            control={control}
-                            defaultValue=""
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    size='small'
-                                    label="Search By Patient Name/UHID/Mobile No."
-                                    variant="outlined"
-                                    fullWidth
-                                    margin="normal"
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <SearchIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            )}
-                        />
-                    </div>
-                    <div className='grid grid-cols-2 gap-2'>
-                        <div>
-                            <FormControl fullWidth margin="normal" size="small">
-                                <InputLabel>Prefix*</InputLabel>
-                                <Controller
-                                    name="Prefix*"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field }) => (
-                                        <Select
-
-                                            {...field}
-                                            label="Prefix*"
-                                        >
-                                            {prefix?.map(option => (
-                                                <MenuItem onClick={(() => { handlePrefix(option?.value, option?.id) })} key={option.value} value={option.value}>
-                                                    {option.name}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    )}
-                                />
-                            </FormControl>
-                        </div>
+            
+            <h1 className='font-bold tracking-wide text-lg'>Patient Basic Information</h1>
+            <div className=' flex justify-between gap-3 '>
+                <div className=''>
+                    <div className='grid grid-cols-3  gap-2  '>
                         <div>
                             <Controller
-                                name="firstname"
+                                name="patientname"
                                 control={control}
                                 defaultValue=""
                                 render={({ field }) => (
                                     <TextField
+                                        className='w-full'
                                         {...field}
                                         size='small'
-                                        label="First Name"
+                                        label="Search By Patient Name/UHID/Mobile No."
                                         variant="outlined"
-                                        fullWidth
+                                        margin="normal"
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <SearchIcon />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Controller
+                                name="email"
+                                control={control}
+                                defaultValue=""
+                                render={({ field }) => (
+                                    <TextField
+                                        className='w-full'
+                                        {...field}
+                                        size='small'
+                                        error={!!errors.email}
+                                        label="Email Id"
+                                        variant="outlined"
                                         margin="normal"
                                     />
                                 )}
                             />
                         </div>
-                    </div>
-                    <div className='flex gap-2'>
                         <div>
                             <Controller
-                                name="dateofbirth"
+                                name="registrationdate"
                                 control={control}
                                 defaultValue=""
                                 render={({ field }) => (
                                     <TextField
-                                        sx={{ width: '300px' }}
+                                        className='w-full'
                                         {...field}
                                         size='small'
-                                        label="Date Of Birth"
+                                        label="Registration Date"
+                                        error={!!errors.registrationdate}
                                         type="date"
                                         InputLabelProps={{ shrink: true }}
                                         variant="outlined"
-                                        fullWidth
-                                        margin="normal"
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div>
-                            <Controller
-                                name="age"
-                                control={control}
-                                defaultValue="0"
-                                render={({ field }) => (
-                                    <TextField
-
-                                        {...field}
-                                        size='small'
-                                        label="Age"
-                                        variant="outlined"
-                                        fullWidth
-                                        margin="normal"
-                                        value={ageData.age}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                )}
-                            />
-                        </div>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '30% 66.6%', columnGap: '10px' }}>
-                        <div>
-                            <FormControl fullWidth margin="normal" size="small">
-                                <InputLabel>ISD*</InputLabel>
-                                <Controller
-                                    name="isdcode*"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field }) => (
-                                        <Select
-                                            {...field}
-                                            label="ISD*"
-                                        >
-                                            {isd?.map(option => (
-                                                <MenuItem onClick={(() => { handleIsdcode(option?.value, option?.id) })} key={option.value} value={option.value}>
-                                                    {option.name}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    )}
-                                />
-                            </FormControl>
-                        </div>
-                        <div>
-                            <Controller
-                                name="mobileno"
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <TextField
-                                        fullWidth
-                                        {...field}
-                                        size='small'
-                                        label="Mobile *"
-                                        variant="outlined"
                                         margin="normal"
                                     />
                                 )}
                             />
                         </div>
                     </div>
-
-                </div>
-                <div className='second_2  '>
-                    <div>
-                        <Controller
-                            name="email"
-                            control={control}
-                            defaultValue=""
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    size='small'
-                                    label="Email Id"
-                                    variant="outlined"
-                                    fullWidth
-                                    margin="normal"
-                                />
-                            )}
-                        />
-                    </div>
-                    <div>
-                        <Controller
-                            name="middleName"
-                            control={control}
-                            defaultValue=""
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    size='small'
-                                    label="Middle Name"
-                                    variant="outlined"
-                                    fullWidth
-                                    margin="normal"
-                                />
-                            )}
-                        />
-                    </div>
-                    <div className=' grid grid-cols-3 gap-2'>
-                        <div>
-                            <Controller
-                                name="years"
-                                control={control}
-                                defaultValue="0"
-                                render={({ field }) => (
-                                    <TextField
-
-                                        {...field}
-                                        size='small'
-                                        label="Years"
-                                        variant="outlined"
-                                        fullWidth
-                                        margin="normal"
-                                        value={ageData.years}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div>
-                            <Controller
-                                name="months"
-                                control={control}
-                                defaultValue="0"
-                                render={({ field }) => (
-                                    <TextField
-
-                                        {...field}
-                                        size='small'
-                                        label="Months"
-                                        variant="outlined"
-                                        fullWidth
-                                        margin="normal"
-                                        value={ageData.months}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div>
-                            <Controller
-                                name="days"
-                                control={control}
-                                defaultValue="0"
-                                render={({ field }) => (
-                                    <TextField
-
-                                        {...field}
-                                        size='small'
-                                        label="Days"
-                                        variant="outlined"
-                                        fullWidth
-                                        margin="normal"
-                                        value={ageData.days}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                )}
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <FormControl fullWidth margin="normal" size="small">
-                            <InputLabel>Marital Status</InputLabel>
-                            <Controller
-                                name="maritalStatus"
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <Select
-
-                                        {...field}
-                                        label="Marital Status "
-                                    >
-                                        {maritalStatus?.map(option => (
-                                            <MenuItem onClick={(() => { handlemarital(option.value, option.id) })} key={option.value} value={option.value}>
-                                                {option.name}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                )}
-                            />
-                        </FormControl>
-                    </div>
-                </div>
-                <div className='*****'>
-                    <div className='flex gap-3'>
-                        <div>
+                    <div className='grid grid-cols-3 gap-2'>
+                        <div className='flex gap-11'>
                             <div>
-                                <Controller
-                                    name="registrationdate"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field }) => (
-                                        <TextField
-
-                                            {...field}
-                                            size='small'
-                                            label="Registration Date"
-                                            type="date"
-                                            InputLabelProps={{ shrink: true }}
-                                            variant="outlined"
-                                            fullWidth
-                                            margin="normal"
-                                        />
-                                    )}
-                                />
-                            </div>
-                            <div>
-                                <Controller
-                                    name="lastname"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field }) => (
-                                        <TextField
-                                            {...field}
-                                            size='small'
-                                            label="Last Name"
-                                            variant="outlined"
-                                            fullWidth
-                                            margin="normal"
-                                        />
-                                    )}
-                                />
-                            </div>
-                            <div>
-                                <FormControl fullWidth margin="normal" size="small">
-                                    <InputLabel> Gender*</InputLabel>
+                                <FormControl className='w-32' margin="normal" size="small" error={!!errors.Prefix}>
+                                    <InputLabel>Prefix*</InputLabel>
                                     <Controller
-                                        name=" Gender *"
+                                        name="Prefix"
                                         control={control}
                                         defaultValue=""
                                         render={({ field }) => (
                                             <Select
-
+                                                className='w-40'
                                                 {...field}
-                                                label="Gender*"
+                                                label="Prefix*"
+
                                             >
-                                                {gender?.map(option => (
-                                                    <MenuItem onClick={(() => { handleGender(option.value, option.id) })} key={option.value} value={option.value}>
+                                                {prefix?.map(option => (
+                                                    <MenuItem onClick={(() => { handlePrefix(option?.value, option?.id) })} key={option.value} value={option.value}>
+                                                        {option.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        )}
+                                    />
+                                </FormControl>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="firstname"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <TextField
+                                            className='w-40'
+                                            {...field}
+                                            size='small'
+                                            error={!!errors.firstname}
+                                            label="First Name"
+                                            variant="outlined"
+                                            margin="normal"
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <Controller
+                                name="middleName"
+                                control={control}
+                                defaultValue=""
+                                render={({ field }) => (
+                                    <TextField
+                                        className='w-full'
+                                        {...field}
+                                        size='small'
+                                        error={!!errors.middleName}
+                                        label="Middle Name"
+                                        variant="outlined"
+                                        margin="normal"
+                                    />
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <Controller
+                                name="lastname"
+                                control={control}
+                                defaultValue=""
+                                render={({ field }) => (
+                                    <TextField
+                                        className='w-full'
+                                        {...field}
+                                        size='small'
+                                        label="Last Name"
+                                        error={!!errors.lastname}
+                                        variant="outlined"
+                                        margin="normal"
+                                    />
+                                )}
+                            />
+                        </div>
+
+                    </div>
+                    <div className='grid grid-cols-3 gap-2'>
+                        <div className='flex space-x-3'>
+                            <div>
+                                <Controller
+                                    name="dateofbirth"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <TextField
+                                            className='w-56'
+                                            {...field}
+                                            size='small'
+                                            error={!!errors.dateofbirth}
+                                            label="Date Of Birth"
+                                            type="date"
+                                            InputLabelProps={{ shrink: true }}
+                                            variant="outlined"
+
+                                            margin="normal"
+                                        />
+                                    )}
+                                />
+                            </div>
+                            <div>
+                                <Controller
+                                    name="age"
+                                    control={control}
+                                    defaultValue="0"
+                                    render={({ field }) => (
+                                        <TextField
+                                            className='w-24'
+                                            {...field}
+                                            size='small'
+                                            label="Age"
+                                            variant="outlined"
+                                            margin="normal"
+                                            value={ageData.age}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+                        <div className='flex gap-3'>
+                            <div>
+                                <Controller
+                                    name="years"
+                                    control={control}
+                                    defaultValue="0"
+                                    render={({ field }) => (
+                                        <TextField
+                                            className='w-16'
+                                            {...field}
+                                            size='small'
+                                            label="Years"
+                                            variant="outlined"
+                                            fullWidth
+                                            margin="normal"
+                                            value={ageData?.years}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </div>
+                            <div>
+                                <Controller
+                                    name="months"
+                                    control={control}
+                                    defaultValue="0"
+                                    render={({ field }) => (
+                                        <TextField
+                                            className='w-16'
+
+                                            {...field}
+                                            size='small'
+                                            label="Months"
+                                            variant="outlined"
+                                            fullWidth
+                                            margin="normal"
+                                            value={ageData?.months}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </div>
+                            <div>
+                                <Controller
+                                    name="days"
+                                    control={control}
+                                    defaultValue="0"
+                                    render={({ field }) => (
+                                        <TextField
+                                            {...field}
+                                            size='small'
+                                            label="Days"
+                                            variant="outlined"
+                                            fullWidth
+                                            margin="normal"
+                                            value={ageData?.days}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <FormControl fullWidth margin="normal" size="small" error={!!errors.genderValue}>
+                                <InputLabel>Gender*</InputLabel>
+                                <Controller
+                                    name="genderValue"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <Select
+                                            className='w-full'
+                                            {...field}
+                                            label="gender"
+                                        >
+                                            {gender?.map(option => (
+                                                <MenuItem onClick={(() => { handleGender(option?.value, option?.id) })} key={option.value} value={option.value}>
+                                                    {option.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    )}
+                                />
+                            </FormControl>
+
+                        </div>
+                    </div>
+                    <div className='grid grid-cols-3'>
+                        <div className='flex space-x-3'>
+                            <div>
+                                <FormControl fullWidth margin="normal" size="small" error={!!errors.isdcode}>
+                                    <InputLabel>ISD*</InputLabel>
+                                    <Controller
+                                        name="isdcode"
+                                        control={control}
+                                        defaultValue=""
+                                        render={({ field }) => (
+                                            <Select
+                                                className='w-24'
+                                                {...field}
+                                                label="ISD*"
+                                            >
+                                                {isd?.map(option => (
+                                                    <MenuItem onClick={(() => { handleIsdcode(option?.value, option?.id) })} key={option.value} value={option.value}>
+                                                        {option.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        )}
+                                    />
+                                </FormControl>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="mobileno"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <TextField
+                                            className='w-56'
+                                            {...field}
+                                            size='small'
+                                            error={!!errors.mobileno}
+                                            label="Mobile *"
+                                            variant="outlined"
+                                            margin="normal"
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+                        <div >
+                            <FormControl  style={{ width: '21rem' }} margin="normal" size="small" error={!!errors.maritalStatus}>
+                                <InputLabel>Marital Status</InputLabel>
+                                <Controller
+                                    name="maritalStatus"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <Select
+                                            {...field}
+                                            label="Marital Status "
+                                        >
+                                            {maritalStatus?.map(option => (
+                                                <MenuItem onClick={(() => { handlemarital(option?.value, option?.id) })} key={option.value} value={option.value}>
+                                                    {option.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    )}
+                                />
+                            </FormControl>
+                        </div>
+                        <div className='flex ml-1 gap-2'>
+                            <div >
+                                <FormControl fullWidth margin="normal" size="small" error={!!errors.nationality}>
+                                    <InputLabel>Nationality</InputLabel>
+                                    <Controller
+                                        name="nationality"
+                                        control={control}
+                                        defaultValue=""
+                                        render={({ field }) => (
+                                            <Select
+                                                className='w-64'
+                                                {...field}
+                                                label="Nationality"
+                                            >
+                                                {nationality?.map(option => (
+                                                    <MenuItem onClick={(() => { handleNationality(option.value, option.id) })} key={option.value} value={option.value}>
+                                                        {option.name}
+                                                    </MenuItem>
+                                                ))}
+
+
+                                            </Select>
+                                        )}
+                                    />
+                                </FormControl>
+                            </div>
+                            <div>
+                                <FormControl fullWidth margin="normal" size='small' error={!!errors.bloodgroup}>
+                                    <InputLabel>Blood  Group</InputLabel>
+                                    <Controller
+                                        name="bloodgroup"
+                                        control={control}
+                                        defaultValue=""
+                                        render={({ field }) => (
+                                            <Select
+                                                className='w-64'
+                                                {...field}
+                                                label="Blood  Group"
+                                            >
+                                                {bloodGroup?.map(option => (
+                                                    <MenuItem onClick={(() => { handleBloodGroup(option.value, option.id) })} key={option.value} value={option.value}>
                                                         {option.name}
                                                     </MenuItem>
                                                 ))}
@@ -646,67 +740,42 @@ console.log("tempObj",tempObj);
                                 </FormControl>
                             </div>
                         </div>
-                        <div className='border '>
-                            <img className='w-[160px]' src='https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg?w=740'
-                                alt='avatar' />
-                            <p className='  font-medium text-blue-600 text-center'>UPLOAD PROFILE</p>
+
+
+                    </div>
+
+                </div>
+
+                <div className='*****'>
+                    <div className='flex gap-3 mt-4 mb-2'>
+
+                        <div className='border rounded w-44'>
+                            <input
+                                type='file'
+                                accept='image/*'
+                                onChange={handleImageChange}
+                                style={{ display: 'none' }}
+                                id='file-input'
+                            />
+                            <label htmlFor='file-input'>
+                                <img
+                                    className='w-[175px] h-[148px] object-cover'
+                                    src={image || 'https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg?w=740'}
+                                    alt='avatar'
+                                    style={{ cursor: 'pointer' }}
+                                />
+                            </label>
+                            <p className='font-medium text-blue-600 text-center'>UPLOAD PROFILE</p>
                         </div>
                     </div>
                     <div className='grid grid-cols-2 gap-2'>
-                        <div >
-                            <FormControl fullWidth margin="normal" size="small">
-                                <InputLabel>Nationality</InputLabel>
-                                <Controller
-                                    name="nationality"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field }) => (
-                                        <Select
 
-                                            {...field}
-                                            label="Nationality"
-                                        >
-                                            {nationality?.map(option => (
-                                                <MenuItem onClick={(() => { handleNationality(option.value, option.id) })} key={option.value} value={option.value}>
-                                                    {option.name}
-                                                </MenuItem>
-                                            ))}
-
-
-                                        </Select>
-                                    )}
-                                />
-                            </FormControl>
-                        </div>
-                        <div>
-                            <FormControl fullWidth margin="normal" size='small'>
-                                <InputLabel>Blood  Group</InputLabel>
-                                <Controller
-                                    name="blopdgroup"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field }) => (
-                                        <Select
-
-                                            {...field}
-                                            label="Blood  Group"
-                                        >
-                                            {bloodGroup?.map(option => (
-                                                <MenuItem onClick={(() => { handleBloodGroup(option.value, option.id) })} key={option.value} value={option.value}>
-                                                    {option.name}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    )}
-                                />
-                            </FormControl>
-                        </div>
                     </div>
                 </div>
             </div>
             <hr className="border-none mt-4 h-[1px] bg-black" />
-            {/* <div>
-                <h1 className='font-bold mt-3'> Address Details</h1>
+            <div>
+                <h1 className='font-bold text-lg mt-3 tracking-wide'> Address Details</h1>
                 <div className='grid grid-cols-4 gap-2'>
                     <div>
                         <Controller
@@ -717,6 +786,7 @@ console.log("tempObj",tempObj);
                                 <TextField
                                     {...field}
                                     size='small'
+
                                     label="House No./Flat NO./Building Name"
                                     variant="outlined"
                                     fullWidth
@@ -787,7 +857,7 @@ console.log("tempObj",tempObj);
                         </FormControl>
                     </div>
                     <div>
-                        <FormControl fullWidth margin="normal" size="small">
+                        <FormControl fullWidth   size="small">
                             <InputLabel> District*</InputLabel>
                             <Controller
                                 name="District*"
@@ -809,7 +879,7 @@ console.log("tempObj",tempObj);
                         </FormControl>
                     </div>
                     <div>
-                        <FormControl fullWidth margin="normal" size="small">
+                        <FormControl fullWidth   size="small">
                             <InputLabel> Taluka *</InputLabel>
                             <Controller
                                 name="Taluka*"
@@ -831,7 +901,7 @@ console.log("tempObj",tempObj);
                         </FormControl>
                     </div>
                     <div>
-                        <FormControl fullWidth margin="normal" size="small">
+                        <FormControl fullWidth   size="small">
                             <InputLabel>City *</InputLabel>
                             <Controller
                                 name="City"
@@ -853,7 +923,7 @@ console.log("tempObj",tempObj);
                         </FormControl>
                     </div>
                     <div>
-                        <FormControl fullWidth margin="normal" size="small">
+                        <FormControl fullWidth  size="small">
                             <InputLabel>Area *</InputLabel>
                             <Controller
                                 name="Area*"
@@ -874,7 +944,6 @@ console.log("tempObj",tempObj);
                             />
                         </FormControl>
                     </div>
-
                     <div>
                         <Controller
                             name="pincode"
@@ -887,7 +956,6 @@ console.log("tempObj",tempObj);
                                     label="PinCode"
                                     variant="outlined"
                                     fullWidth
-                                    margin="normal"
                                 />
                             )}
                         />
@@ -897,14 +965,14 @@ console.log("tempObj",tempObj);
 
                 </div>
 
-            </div> */}
+            </div>
 
 
-            <div className='text-center mt-3'>
+            <div className='text-end mt-3'>
                 <CommonButton
                     label='Submit'
                     type='submit'
-                    className=' w-32  bg-blue-600 text-white text-center'
+                    className=' w-32  bg-blue-600 text-white  text-lg font-semibold'
                 />
             </div>
         </form>

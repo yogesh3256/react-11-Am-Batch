@@ -80,6 +80,9 @@ function HidePassword() {
                         )}
                     />
                 </div>
+                <div>
+                    
+                </div>
                 <div className='text-center'>
                     <CommonButton
                         label='Submit'
