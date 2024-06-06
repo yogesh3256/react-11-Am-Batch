@@ -391,7 +391,7 @@ const dataArr = {
 function MedicationPrint() {
   return (
     <div className="w-full overflow-x-auto">
-      <table>
+      <table className="border">
         <thead className="border">
           <tr className="border whitespace-nowrap">
             <th className="border bg-gray-100" rowSpan={2}>
@@ -406,8 +406,7 @@ function MedicationPrint() {
             <th className="border bg-gray-100" rowSpan={2}>
               Name of the Medication
             </th>
-            <th
-              className="border bg-gray-100" rowSpan={2}>
+            <th className="border bg-gray-100" rowSpan={2}>
               Dose
             </th>
             <th className="border bg-gray-100" rowSpan={2}>
@@ -416,24 +415,21 @@ function MedicationPrint() {
             <th className="border bg-gray-100" rowSpan={2}>
               Frequency
             </th>
-            
-              <>
-                {dataArr.MedicationChartDetails.map((dateKey,) => (
-                  <>
-                    {
-                      dateKey.medicationChartDateDtoList.map((listOfDate, index) => (
-                        <th key={index} className="border bg-gray-100 text-center" colSpan={listOfDate.medicationChartTimeDtoList.length}>
-                          {listOfDate.date}
-                        </th>
-                      ))
-                    }
-                  </>
-                ))
 
-                }
-              </>
-            
-
+            <>
+              {dataArr.MedicationChartDetails.map((dateKey,) => (
+                <>
+                  {
+                    dateKey.medicationChartDateDtoList.map((listOfDate, index) => (
+                      <th key={index} className="border bg-gray-100 text-center" colSpan={listOfDate.medicationChartTimeDtoList.length}>
+                        {listOfDate.date}
+                      </th>
+                    ))
+                  }
+                </>
+              ))
+              }
+            </>
           </tr>
           <tr>
             <>
@@ -447,7 +443,6 @@ function MedicationPrint() {
                             <>
                               <th className="whitespace-nowrap border  bg-gray-100">
                                 {timelist.timeSlot}
-
                               </th>
                             </>
                           ))
@@ -457,7 +452,6 @@ function MedicationPrint() {
                   }
                 </>
               ))
-
               }
             </>
           </tr>
@@ -508,6 +502,7 @@ function MedicationPrint() {
           }
         </tbody>
       </table>
+
     </div>
   );
 }

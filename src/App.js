@@ -175,9 +175,9 @@ function App() {
  {/* <Time/> */}
 
  {/* <AxiosFetchApi/> */}
- <DocItLoginForm/>
+ {/* <DocItLoginForm/> */}
  {/* <RowColSpanTable/> */}
- {/* <DropDownTable/> */}
+ <DropDownTable/>
  {/* <TableApi/> */}
  {/* <HookFormTAsk/> */}
   

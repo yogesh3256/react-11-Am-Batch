@@ -2,36 +2,47 @@ import React from 'react';
 import Select from 'react-select';
 import { Controller } from 'react-hook-form';
 
-function CommonSelect({ name, control, label, fullWidth, value, options, onChange,placeholder,className,width,isClearable }) {
+function CommonSelect({
+    name,
+    control,
+    label,
+    fullWidth,
+    options,
+    onChange,
+    placeholder,
+    className,
+    width,
+    isClearable,
+    defaultValue
+}) {
     return (
-        <div style={{width:width  }}>
+        <div style={{ width: width }}>
             {control ? (
                 <Controller
                     name={name}
                     className={className}
                     label={label}
                     control={control}
-                    defaultValue={value}
+                    defaultValue={defaultValue}
                     render={({ field }) => (
                         <Select
                             {...field}
                             options={options}
-                            value={value}
                             onChange={(selectedOption) => field.onChange(selectedOption)}
                             placeholder={placeholder}
                             isClearable={isClearable}
-                            fullWidth
+                            fullWidth={fullWidth}
                         />
                     )}
                 />
             ) : (
                 <Select
-                className={className}
-                    value={value}
+                    className={className}
                     options={options}
-                    onChange={(selectedOption) =>onChange(selectedOption)}
+                    onChange={(selectedOption) => onChange(selectedOption)}
                     placeholder={placeholder}
-                    isClearable
+                    isClearable={isClearable}
+                    defaultValue={defaultValue}
                     fullWidth={fullWidth}
                 />
             )}
