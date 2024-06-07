@@ -60,6 +60,7 @@ import Hide_Passward from './Component/practice Task/HidepassWord/Hide_Passward'
 import StudentModal from './Component/task/table/StudentModal';
 import UseFieldArrayForm from './Component/hookform/useFieldArray/UseFieldArrayForm';
 import HookFormTAsk from './Component/hookform/hookformask/HookFormTAsk';
+import ArrayMapTask from './Component/nestedArrayTask/ArrayMapTask';
 
 
  
@@ -175,11 +176,12 @@ function App() {
  {/* <Time/> */}
 
  {/* <AxiosFetchApi/> */}
- {/* <DocItLoginForm/> */}
  {/* <RowColSpanTable/> */}
- <DropDownTable/>
+ {/* <DocItLoginForm/> */}
+ {/* <DropDownTable/> */}
  {/* <TableApi/> */}
  {/* <HookFormTAsk/> */}
+ <ArrayMapTask/>
   
     </SnackbarProvider>
     </>

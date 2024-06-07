@@ -110,7 +110,7 @@ function TableApi() {
                                                 <TableCell align="right">{item.std}</TableCell>
                                                 <TableCell align="right">{item.percentage}</TableCell>
                                                 <TableCell align="right">
-                                                    <div>
+                                                    <div className='space-x-2'>
                                                         <EditIcon onClick={() => handleEdit(item)} />
                                                         <DeleteIcon onClick={() => handleDelete(item.id)} />
                                                     </div>

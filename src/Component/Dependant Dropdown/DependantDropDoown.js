@@ -124,6 +124,7 @@ function DependantDropDown(props) {
                                 <div>
                                     <CommonSelect
                                         name='country'
+                                        isClearable={true}
                                         control={control}
                                         options={country}
                                         label="Country"
@@ -134,6 +135,7 @@ function DependantDropDown(props) {
                                 <div>
                                     <CommonSelect
                                         name='state'
+                                        isClearable={true}
                                         control={control}
                                         options={state}
                                         label="State"
@@ -144,6 +146,7 @@ function DependantDropDown(props) {
                                 <div>
                                     <CommonSelect
                                         name='district'
+                                        isClearable={true}
                                         control={control}
                                         options={district}
                                         label="District"
@@ -154,6 +157,7 @@ function DependantDropDown(props) {
                                 <div>
                                     <CommonSelect
                                         name='taluka'
+                                        isClearable={true}
                                         control={control}
                                         options={taluka}
                                         label="Taluka"
@@ -164,6 +168,7 @@ function DependantDropDown(props) {
                                 <div>
                                     <CommonSelect
                                         name='city'
+                                        isClearable={true}
                                         control={control}
                                         label="City"
                                         options={city}
