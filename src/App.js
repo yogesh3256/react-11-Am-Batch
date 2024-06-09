@@ -61,6 +61,7 @@ import StudentModal from './Component/task/table/StudentModal';
 import UseFieldArrayForm from './Component/hookform/useFieldArray/UseFieldArrayForm';
 import HookFormTAsk from './Component/hookform/hookformask/HookFormTAsk';
 import ArrayMapTask from './Component/nestedArrayTask/ArrayMapTask';
+import Api_Handle_Pro from './Component/Api_Handle_Like_PRO/Api_Handle_Pro';
 
 
  
@@ -181,7 +182,11 @@ function App() {
  {/* <DropDownTable/> */}
  {/* <TableApi/> */}
  {/* <HookFormTAsk/> */}
- <ArrayMapTask/>
+ {/* <ArrayMapTask/> */}
+
+
+ {/* API Handle Like a PRo */}
+ <Api_Handle_Pro/>
   
     </SnackbarProvider>
     </>
