@@ -17,7 +17,7 @@ function DependantDropDown(props) {
         pincode: ''
     };
 
-    const { handleSubmit, control, watch, reset } = useForm({
+    const { handleSubmit, control, watch, reset ,register } = useForm({
         defaultValues: defaultValues
     });
 
@@ -128,6 +128,11 @@ function DependantDropDown(props) {
                                         control={control}
                                         options={country}
                                         label="Country"
+                                        inputref={{...register("country",{
+                                            onChange:(e)=>{
+                                                // value
+                                            }
+                                        })}}
                                         
                                         placeholder='Select the Country'
                                     />

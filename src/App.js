@@ -62,6 +62,10 @@ import UseFieldArrayForm from './Component/hookform/useFieldArray/UseFieldArrayF
 import HookFormTAsk from './Component/hookform/hookformask/HookFormTAsk';
 import ArrayMapTask from './Component/nestedArrayTask/ArrayMapTask';
 import Api_Handle_Pro from './Component/Api_Handle_Like_PRO/Api_Handle_Pro';
+import DependantMappingParrent from './Component/Dependant Dropdown/dependent Mapping/DependantMappingParrent';
+import ArrayOfObjectVAlidation from './Component/hookform/useFieldArray/ArrayOfObjectVAlidation';
+import UseFieldArrayWithDataPicker from './Component/hookform/useFieldArray/UseFieldArrayWithDataPicker';
+import RecurrsiveMapping from './Component/nestedArrayTask/RecursiveMapping/RecurrsiveMapping';
 
 
  
@@ -158,6 +162,9 @@ function App() {
 
       {/* <Todoapp/> */}
       {/* <Dropdown/> */}
+      {/* <DependantMappingParrent/> */}
+      {/* <ArrayOfObjectVAlidation/> */}
+      
 
 {/* <Form/>   */}
 {/* <Task/>     */}
@@ -182,11 +189,12 @@ function App() {
  {/* <DropDownTable/> */}
  {/* <TableApi/> */}
  {/* <HookFormTAsk/> */}
- {/* <ArrayMapTask/> */}
+ <ArrayMapTask/>
+ {/* <RecurrsiveMapping/> */}
 
 
  {/* API Handle Like a PRo */}
- <Api_Handle_Pro/>
+ {/* <Api_Handle_Pro/> */}
   
     </SnackbarProvider>
     </>

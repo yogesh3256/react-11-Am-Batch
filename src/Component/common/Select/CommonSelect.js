@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select, { createFilter } from 'react-select';
 import { Controller } from 'react-hook-form';
 
 function CommonSelect({
@@ -32,6 +32,15 @@ function CommonSelect({
                             placeholder={placeholder}
                             isClearable={isClearable}
                             fullWidth={fullWidth}
+                            menuPlacement=''
+                            ref={""}
+                            hideSelectedOptions={""}
+                            filterOption={createFilter({
+                                matchFrom:"start" // "any"
+                            })}
+                            
+
+
                         />
                     )}
                 />

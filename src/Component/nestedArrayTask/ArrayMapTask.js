@@ -1,3 +1,4 @@
+
 import React, { memo, useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -63,6 +64,7 @@ const IOSSwitch = styled((props) => (
 function ArrayMapTask() {
     const [dummyArrayData, setDummyArrayData] = useState(DummyData.subFunction);
     const [expanded, setExpanded] = useState(Array(DummyData.subFunction.length).fill(false));
+    const [accordionWidth, setAccordionWidth] = useState("20%");
 
     const handleParentChange = (e, index) => {
         e.stopPropagation(); // Prevent the accordion from closing
@@ -70,10 +72,10 @@ function ArrayMapTask() {
         data[index].isChecked = e.target.checked;
 
         if (data[index]?.subFunction) {
-            data[index].subFunction = data[index].subFunction.map(sub => ({
+            data[index].subFunction = data[index].subFunction?.map(sub => ({
                 ...sub,
                 isChecked: e.target.checked,
-                permissions: sub.permissions.map(permission => ({
+                permissions: sub.permissions?.map(permission => ({
                     ...permission,
                     isChecked: e.target.checked
                 }))
@@ -82,6 +84,12 @@ function ArrayMapTask() {
 
         setDummyArrayData(data);
         setExpanded(expanded.map((exp, i) => i === index || exp)); // Expand the accordion on first click
+        setAccordionWidth("100%"); // Expand the accordion width
+    };
+
+    const handleAccordionChange = (index) => (event, isExpanded) => {
+        setExpanded(expanded?.map((exp, i) => (i === index ? isExpanded : exp)));
+        setAccordionWidth(isExpanded ? "100%" : "20%"); // Adjust width when accordion is expanded or collapsed
     };
 
     const handleChildChange = (e, parentIndex, childIndex) => {
@@ -90,7 +98,7 @@ function ArrayMapTask() {
 
         if (data[parentIndex].subFunction[childIndex]?.permissions) {
             data[parentIndex].subFunction[childIndex].permissions = data[parentIndex].subFunction[childIndex].permissions.map(permission =>
-                 ({
+            ({
                 ...permission,
                 isChecked: e.target.checked
             }));
@@ -106,25 +114,20 @@ function ArrayMapTask() {
     const handlePermissionChange = (e, parentIndex, childIndex, permissionIndex) => {
         let data = [...dummyArrayData];
         data[parentIndex].subFunction[childIndex].permissions[permissionIndex].isChecked = e.target.checked;
-    
+
         // Check if all permission checkboxes are unchecked
         const allPermissionsUnchecked = data[parentIndex].subFunction[childIndex].permissions.every(permission => !permission.isChecked);
         data[parentIndex].subFunction[childIndex].isChecked = !allPermissionsUnchecked;
-    
+
         // Check if all child checkboxes are checked
         const allChildrenChecked = data[parentIndex].subFunction.every(child => child.isChecked);
         data[parentIndex].isChecked = allChildrenChecked;
-    
+
         // Check if all child checkboxes are unchecked
         const allChildrenUnchecked = data[parentIndex].subFunction.every(child => !child.isChecked);
         data[parentIndex].isChecked = !allChildrenUnchecked;
-    
-        setDummyArrayData(data);
-    };
-    
 
-    const handleAccordionChange = (index) => (event, isExpanded) => {
-        setExpanded(expanded.map((exp, i) => (i === index ? isExpanded : exp)));
+        setDummyArrayData(data);
     };
 
     return (
@@ -145,6 +148,7 @@ function ArrayMapTask() {
                                 marginBottom: '5px',
                                 boxShadow: '0px 2px 8px rgba(0,0,0,0.1)',
                                 overflow: 'hidden',
+                                width: accordionWidth
                             }}
                         >
                             <AccordionSummary
@@ -171,7 +175,7 @@ function ArrayMapTask() {
                                     data.subFunction.map((subFunctionData, childIndex) => (
                                         <div key={childIndex} className='ml-10 mb-3'>
                                             <Accordion
-                                            
+
                                             >
                                                 <AccordionSummary
                                                     expandIcon={<ArrowDropDownIcon />}
@@ -187,6 +191,7 @@ function ArrayMapTask() {
                                                         marginBottom: '5px',
                                                         boxShadow: '0px 2px 8px rgba(0,0,0,0.1)',
                                                         overflow: 'hidden',
+                                                        width: accordionWidth
                                                     }}
                                                 >
                                                     <div className='flex gap-3'>
@@ -198,30 +203,30 @@ function ArrayMapTask() {
                                                         <label className='font-semibold tracking-wide'>{subFunctionData.functionality}</label>
                                                     </div>
                                                 </AccordionSummary>
-                                               <div className='pl-20'>
-                                               <AccordionDetails>
-                                                    {subFunctionData?.permissions && subFunctionData.permissions.length > 0 &&
-                                                        <div className='grid grid-cols-3 gap-3'>
-                                                            {subFunctionData.permissions.map((permissionData, permissionIndex) => (
-                                                                <div key={permissionIndex} className='grid grid-cols-2'>
-                                                                    <div className='flex gap-3'>
-                                                                        <input
-                                                                            type='checkbox'
-                                                                            checked={permissionData.isChecked}
-                                                                            onChange={(e) => handlePermissionChange(e, parentIndex, childIndex, permissionIndex)}
+                                                <div className='pl-20'>
+                                                    <AccordionDetails>
+                                                        {subFunctionData?.permissions && subFunctionData.permissions.length > 0 &&
+                                                            <div className='grid grid-cols-3 gap-3'>
+                                                                {subFunctionData.permissions.map((permissionData, permissionIndex) => (
+                                                                    <div key={permissionIndex} className='grid grid-cols-2'>
+                                                                        <div className='flex gap-3'>
+                                                                            <input
+                                                                                type='checkbox'
+                                                                                checked={permissionData.isChecked}
+                                                                                onChange={(e) => handlePermissionChange(e, parentIndex, childIndex, permissionIndex)}
+                                                                            />
+                                                                            <h1 className='mt-2 font-mono'>{permissionData.permission}</h1>
+                                                                        </div>
+                                                                        <FormControlLabel
+                                                                            control={<IOSSwitch sx={{ m: 1 }}
+                                                                                checked={permissionData.isAction} />}
                                                                         />
-                                                                        <h1 className='mt-2 font-mono'>{permissionData.permission}</h1>
                                                                     </div>
-                                                                    <FormControlLabel
-                                                                        control={<IOSSwitch sx={{ m: 1 }}
-                                                                            checked={permissionData.isAction} />}
-                                                                    />
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    }
-                                                </AccordionDetails>
-                                               </div>
+                                                                ))}
+                                                            </div>
+                                                        }
+                                                    </AccordionDetails>
+                                                </div>
                                             </Accordion>
                                         </div>
                                     ))}
