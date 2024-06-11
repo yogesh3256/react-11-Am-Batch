@@ -70,7 +70,7 @@ const RecursiveAccordion = ({ data, level = 0, parentIndex = null, childIndex = 
 
     return (
         <div style={{ marginLeft: level * 20 }}>
-            {data.map((item, index) => {
+            {data?.map((item, index) => {
                 const currentIndex = parentIndex !== null ? `${parentIndex}-${index}` : index;
                 return (
                     <Accordion

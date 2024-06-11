@@ -40,7 +40,7 @@ import Dropdown from './Component/Dependant Dropdown/Dropdown';
 import Form from './Component/hookform/Form';
 import Task from './Component/hookform/Task';
 import ParrentComponent from './Component/hookform/form/ParrentComponent';
- import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider } from 'notistack';
 import { Slide } from "@mui/material";
 import CommonTable from './Component/GST&DISCOUNT/Table';
 import ItemMaster from './Component/GST&DISCOUNT/nitinsir_method/ItemMaster';
@@ -66,10 +66,13 @@ import DependantMappingParrent from './Component/Dependant Dropdown/dependent Ma
 import ArrayOfObjectVAlidation from './Component/hookform/useFieldArray/ArrayOfObjectVAlidation';
 import UseFieldArrayWithDataPicker from './Component/hookform/useFieldArray/UseFieldArrayWithDataPicker';
 import RecurrsiveMapping from './Component/nestedArrayTask/RecursiveMapping/RecurrsiveMapping';
+import Addiction from './Component/CustomHooks/Addiction';
+import TodoAppUseContext from './Component/Todo app/todocomponent/TodoAppUseContext';
+import { TodoProvider } from './Component/Todo app/todoContext/TodoProvider';
 
 
- 
-function App() {                     
+
+function App() {
   // const notify = () => toast("Wow so easy!");
 
   return (
@@ -80,14 +83,14 @@ function App() {
           vertical: "top",
           horizontal: "right",
         }}>
-    {/* <SpreadOperator/> */}
-      {/* <StepperEx/> */}
-     
-      {/* <ProductList/> */}
-       
-       
+        {/* <SpreadOperator/> */}
+        {/* <StepperEx/> */}
 
-      {/* <Link to='/' className=' underline'>Home</Link><br/>
+        {/* <ProductList/> */}
+
+
+
+        {/* <Link to='/' className=' underline'>Home</Link><br/>
         <Link to='/contact' className=' underline'>Contact</Link><br/>
         <Link to='/ about' className=' underline'>about</Link>
      
@@ -99,13 +102,13 @@ function App() {
       </Routes> */}
 
 
-      {/* <Drugs/> */}
+        {/* <Drugs/> */}
 
-      {/* <Feedbackarr/> */}
-      {/* <InputCheckbox/> */}
-       {/* <ValidationForm/>  */}
-  
-{/* 
+        {/* <Feedbackarr/> */}
+        {/* <InputCheckbox/> */}
+        {/* <ValidationForm/>  */}
+
+        {/* 
       <Routes>
       
         <Route  path='/' exact element ={<Dashboard/>}/>
@@ -116,13 +119,13 @@ function App() {
 
 
 
-      {/* react  tostify button */}
-      {/* <button onClick={notify}>Notify!</button> *
+        {/* react  tostify button */}
+        {/* <button onClick={notify}>Notify!</button> *
       {/* <ToastContainer /> */}
 
-      {/* <Homepage/> */}
-      {/* <InputFeildTask/> */}
-      {/* <Counter/> */}
+        {/* <Homepage/> */}
+        {/* <InputFeildTask/> */}
+        {/* <Counter/> */}
 
 
 
@@ -137,66 +140,72 @@ function App() {
 
 
 
-      {/* hooks form */}
-      {/* <UsestateEffect/> */}
-      {/* <Usememoo/> */}
-      {/* <Usecallback /> */}
-      {/* <Useref/> */}
-      {/* <UsecontextApi/> */}
-      
+        {/* hooks form */}
+        {/* <UsestateEffect/> */}
+        {/* <Usememoo/> */}
+        {/* <Usecallback /> */}
+        {/* <Useref/> */}
+        {/* <UsecontextApi/> */}
 
 
 
-      {/* <Parent/> */}
+
+        {/* <Parent/> */}
 
 
-      {/* <Curdopration/> */}
-      {/* <Count/> */}
-      {/* <Count2/> */}
-      {/* <Usereducer/>    */}
-{/* <UseReducerForm/> */}
-      {/* <Input/> */}
+        {/* <Curdopration/> */}
+        {/* <Count/> */}
+        {/* <Count2/> */}
+        {/* <Usereducer/>    */}
+        {/* <UseReducerForm/> */}
+        {/* <Input/> */}
 
-{/* practice Task */}
-{/* <Hide_Passward/> */}
+        {/* practice Task */}
+        {/* <Hide_Passward/> */}
 
-      {/* <Todoapp/> */}
-      {/* <Dropdown/> */}
-      {/* <DependantMappingParrent/> */}
-      {/* <ArrayOfObjectVAlidation/> */}
-      
+        {/* <Todoapp/> */}
+        {/* <Dropdown/> */}
+        {/* <DependantMappingParrent/> */}
+        {/* <ArrayOfObjectVAlidation/> */}
 
-{/* <Form/>   */}
-{/* <Task/>     */}
-{/* <ParrentComponent/> */}
-{/* <CommonTable/>       */}
- {/* <ItemMaster/> */}
- {/* <Navbar/> */}
- {/* <ModalAdd/> */}
-{/* 
+
+        {/* <Form/>   */}
+        {/* <Task/>     */}
+        {/* <ParrentComponent/> */}
+        {/* <CommonTable/>       */}
+        {/* <ItemMaster/> */}
+        {/* <Navbar/> */}
+        {/* <ModalAdd/> */}
+        {/* 
  <ParrentTab/> */}
- {/* <UseFieldArrayForm/> */}
+        {/* <UseFieldArrayForm/> */}
 
 
- {/* <DateTaskForm/> */}
- 
- {/* <Date/> */}
- {/* <Time/> */}
+        {/* <DateTaskForm/> */}
 
- {/* <AxiosFetchApi/> */}
- {/* <RowColSpanTable/> */}
- {/* <DocItLoginForm/> */}
- {/* <DropDownTable/> */}
- {/* <TableApi/> */}
- {/* <HookFormTAsk/> */}
- <ArrayMapTask/>
- {/* <RecurrsiveMapping/> */}
+        {/* <Date/> */}
+        {/* <Time/> */}
+
+        {/* <AxiosFetchApi/> */}
+        {/* <RowColSpanTable/> */}
+        {/* <DocItLoginForm/> */}
+        {/* <DropDownTable/> */}
+        {/* <TableApi/> */}
+        {/* <HookFormTAsk/> */}
+        {/* <ArrayMapTask/> */}
+        {/* <RecurrsiveMapping/> */}
 
 
- {/* API Handle Like a PRo */}
- {/* <Api_Handle_Pro/> */}
-  
-    </SnackbarProvider>
+        {/* API Handle Like a PRo */}
+        {/* <Api_Handle_Pro/> */}
+
+        {/* custom Hooks */}
+        {/* <Addiction/> */}
+        <TodoProvider>
+          <TodoAppUseContext />
+        </TodoProvider>
+
+      </SnackbarProvider>
     </>
   )
 }
