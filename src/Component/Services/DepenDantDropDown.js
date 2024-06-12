@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADDRESS_COMMON_URL, API_COMMON_URL } from "../../Http";
+import {  API_COMMON_URL } from "../../Http";
 
 export const countryApi = async () => {
      let res = await axios.get(`${API_COMMON_URL}/countries`)

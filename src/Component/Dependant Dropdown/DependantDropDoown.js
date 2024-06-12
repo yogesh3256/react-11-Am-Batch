@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import CommonTextField from '../common/TextField/CommonTextField';
 import CommonButton from '../common/Button/CommonButton';
 import { cityApi, countryApi, districtApi, stateApi, talukaApi } from '../Services/DepenDantDropDown';
+import { createFilter } from 'react-select';
 
 function DependantDropDown(props) {
     const defaultValues = {
@@ -127,7 +128,13 @@ function DependantDropDown(props) {
                                         isClearable={true}
                                         control={control}
                                         options={country}
+                                        menuPlacement="bottom"
+                                        hideSelectedOptions={true}
+                                        noOptionsMessage={()=>'No options available'}
+                                        filterOption={createFilter({matchFrom:'any'})}
+                                        loadingMessage={()=>'Loading...'}
                                         label="Country"
+                                         
                                         inputref={{...register("country",{
                                             onChange:(e)=>{
                                                 // value

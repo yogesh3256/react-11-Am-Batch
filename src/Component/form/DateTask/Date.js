@@ -2,10 +2,37 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { TextField, Select, MenuItem, FormControlLabel, Checkbox, Button, InputLabel, FormControl } from '@mui/material';
 import CommonTable from '../../common/Table/CommonTable'
+import { format, parse, compareAsc } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
+import { memo } from 'react';
+import CommonButton from '../../common/Button/CommonButton';
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const schemaValidation = yup.object().shape({
+    Hospital: yup.string().required(),
+    weekDay: yup.string().required(),
+    fromTime: yup.string().required(),
+    toTime: yup.string().required(),
+    consultationCharges: yup
+        .number()
+        .typeError('Consultation Charges must be a number')
+        .required('Consultation Charges is required')
+        .positive('Consultation Charges must be a positive number'),
+    FollowUpCharges: yup
+        .number()
+        .typeError('Follow-up Charges must be a number')
+        .required('Follow-up Charges is required')
+        .positive('Follow-up Charges must be a positive number'),
+    User: yup.boolean().required(),
+});
+
 const ConsultationForm = () => {
-    const { control, handleSubmit, reset } = useForm();
+    const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({ resolver: yupResolver(schemaValidation) });
     const [consultationData, setConsultationData] = useState([])
+    const [userChecked, setUserChecked] = useState(false);
+
+
     const onSubmit = (data) => {
         const { consultationCharges, FollowUpCharges } = data;
 
@@ -19,18 +46,18 @@ const ConsultationForm = () => {
             return; // Exit the function early if times are not selected
         }
 
-        // Convert selected time strings to Date objects for comparison
-        const fromTime = new Date(`2000-01-01T${data.fromTime}`);
-        const toTime = new Date(`2000-01-01T${data.toTime}`);
+        // Convert selected time strings to Date objects
+        const fromTime = parse(data.fromTime, 'HH:mm', new Date());
+        const toTime = parse(data.toTime, 'HH:mm', new Date());
 
         // Check for overlap with existing time ranges
         const isOverlap = consultationData.some((item) => {
-            const itemFromTime = new Date(`2000-01-01T${item.fromTime}`);
-            const itemToTime = new Date(`2000-01-01T${item.toTime}`);
+            const itemFromTime = parse(item.fromTime, 'HH:mm', new Date());
+            const itemToTime = parse(item.toTime, 'HH:mm', new Date());
             return (
-                (fromTime > itemFromTime && fromTime < itemToTime) ||
-                (toTime > itemFromTime && toTime < itemToTime) ||
-                (fromTime < itemFromTime && toTime > itemToTime)
+                (compareAsc(fromTime, itemFromTime) === 1 && compareAsc(fromTime, itemToTime) === -1) ||
+                (compareAsc(toTime, itemFromTime) === 1 && compareAsc(toTime, itemToTime) === -1) ||
+                (compareAsc(fromTime, itemFromTime) === -1 && compareAsc(toTime, itemToTime) === 1)
             );
         });
 
@@ -50,7 +77,9 @@ const ConsultationForm = () => {
             const totalCharges = parseInt(consultationCharges) + parseInt(FollowUpCharges);
             data.totalCharges = totalCharges;
 
+            // Reset the form, including unchecking the checkbox
             reset();
+            setUserChecked(false)
 
             // Display toast message indicating successful addition
             enqueueSnackbar(`Data added successfully.`, {
@@ -62,22 +91,22 @@ const ConsultationForm = () => {
 
     return (
         <>
-            <form className='border rounded-lg px-24' onSubmit={handleSubmit(onSubmit)}>
+            <form className='border rounded-lg  py-6 mx-32' onSubmit={handleSubmit(onSubmit)}>
                 <h1 className='text-center text-2xl font-semibold text-blue-600'>Manage The Consultation Charges</h1>
                 <div className="mx-72">
                     <div className='grid grid-cols-2 gap-4 mt-5'>
                         <div>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.Hospital}   >
                                 <InputLabel id="demo-simple-select-label">Hospital</InputLabel>
                                 <Controller
                                     name="Hospital"
                                     control={control}
                                     defaultValue=""
                                     render={({ field }) => (
-                                        <Select {...field} label="xyz">
-                                            <MenuItem value={'Ten'}>Ten</MenuItem>
-                                            <MenuItem value={'Twenty'}>Twenty</MenuItem>
-                                            <MenuItem value={'Thirty'}>Thirty</MenuItem>
+                                        <Select {...field} label="Hospital">
+                                            <MenuItem value={'kothrud Hospital'}>kothrud Hospital</MenuItem>
+                                            <MenuItem value={'sayhadri Hospital'}>sayhadri Hospital</MenuItem>
+                                            <MenuItem value={'Ruby Hospital'}>Ruby Hospital</MenuItem>
                                         </Select>
                                     )}
                                 />
@@ -85,7 +114,7 @@ const ConsultationForm = () => {
                         </div>
 
                         <div>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.weekDay} >
                                 <InputLabel id="demo-simple-select-label">Week Day</InputLabel>
                                 <Controller
                                     name="weekDay"
@@ -112,7 +141,7 @@ const ConsultationForm = () => {
                                 control={control}
                                 defaultValue=""
                                 render={({ field }) => (
-                                    <TextField {...field} label="From Time" type="time" fullWidth />
+                                    <TextField {...field} label="From Time" type="time" fullWidth error={!!errors.fromTime} />
                                 )}
                             />
                         </div>
@@ -122,7 +151,7 @@ const ConsultationForm = () => {
                                 control={control}
                                 defaultValue=""
                                 render={({ field }) => (
-                                    <TextField {...field} label="To Time" type="time" fullWidth />
+                                    <TextField {...field} label="To Time" type="time" fullWidth error={!!errors.toTime} />
                                 )}
                             />
                         </div>
@@ -132,7 +161,7 @@ const ConsultationForm = () => {
                                 control={control}
                                 defaultValue=""
                                 render={({ field }) => (
-                                    <TextField {...field} label="Consultation Charges" fullWidth />
+                                    <TextField {...field} label="Consultation Charges" fullWidth error={!!errors.consultationCharges} />
                                 )}
                             />
                         </div>
@@ -142,7 +171,7 @@ const ConsultationForm = () => {
                                 control={control}
                                 defaultValue=""
                                 render={({ field }) => (
-                                    <TextField {...field} label="Follow up Charges" fullWidth />
+                                    <TextField {...field} label="Follow up Charges" fullWidth error={!!errors.FollowUpCharges} />
                                 )}
                             />
                         </div>
@@ -151,30 +180,31 @@ const ConsultationForm = () => {
                             <Controller
                                 name="User"
                                 control={control}
-                                defaultValue={false}
                                 render={({ field }) => (
                                     <FormControlLabel
-                                        control={<Checkbox {...field} />}
+                                        control={<Checkbox {...field} checked={field.value} />}
                                         label={field.value ? 'Active' : 'Inactive'}
                                     />
                                 )}
                             />
+
                         </div>
 
                     </div>
                     <div className='text-center mb-3'>
-                        <Button type="submit" variant="contained" color="primary">
-                            Add
-                        </Button>
+                        <CommonButton
+                            label='+ADD'
+                            type='submit'
+                            className='bg-blue-500 text-white px-1 w-20 font-semibold'
+                        />
                     </div>
                 </div>
             </form>
             <div>
-                <CommonTable DataResult={consultationData}
-                 />
+                <CommonTable DataResult={consultationData} />
             </div>
         </>
     );
 };
 
-export default ConsultationForm;
+export default memo(ConsultationForm);

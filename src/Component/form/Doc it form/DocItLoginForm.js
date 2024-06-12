@@ -522,7 +522,7 @@ const PatientRegistrationForm = () => {
                                 <Controller
                                     name="age"
                                     control={control}
-                                    defaultValue="0"
+                                   
                                     render={({ field }) => (
                                         <TextField
                                             className='w-24'
@@ -545,7 +545,7 @@ const PatientRegistrationForm = () => {
                                 <Controller
                                     name="years"
                                     control={control}
-                                    defaultValue="0"
+                                   
                                     render={({ field }) => (
                                         <TextField
                                             className='w-16'
@@ -567,7 +567,7 @@ const PatientRegistrationForm = () => {
                                 <Controller
                                     name="months"
                                     control={control}
-                                    defaultValue="0"
+                                   
                                     render={({ field }) => (
                                         <TextField
                                             className='w-16'
@@ -590,7 +590,7 @@ const PatientRegistrationForm = () => {
                                 <Controller
                                     name="days"
                                     control={control}
-                                    defaultValue="0"
+                                    
                                     render={({ field }) => (
                                         <TextField
                                             {...field}

@@ -6,41 +6,53 @@ function CommonSelect({
     name,
     control,
     label,
-    fullWidth,
-    options,
+    fullWidth = false,
+    options = [],
     onChange,
-    placeholder,
+    placeholder = 'Select...',
     className,
-    width,
-    isClearable,
-    defaultValue
+    width = '100%',
+    isClearable = false,
+    defaultValue,
+    menuPlacement = 'auto',
+    ref, // ref should be handled by the Controller
+    hideSelectedOptions = false,
+    filterOption = createFilter({ matchFrom: 'start' }),
+    isDisabled = false,
+    isLoading = false,
+    isMulti = false,
+    noOptionsMessage = () => 'No options available',
+    loadingMessage = () => 'Loading...'
 }) {
     return (
         <div style={{ width: width }}>
             {control ? (
                 <Controller
                     name={name}
-                    className={className}
-                    label={label}
                     control={control}
+                    label={label}
                     defaultValue={defaultValue}
                     render={({ field }) => (
                         <Select
                             {...field}
                             options={options}
-                            onChange={(selectedOption) => field.onChange(selectedOption)}
+                            onChange={(selectedOption) => {
+                                field.onChange(selectedOption);
+                                if (onChange) onChange(selectedOption);
+                            }}
                             placeholder={placeholder}
                             isClearable={isClearable}
-                            fullWidth={fullWidth}
-                            menuPlacement=''
-                            ref={""}
-                            hideSelectedOptions={""}
-                            filterOption={createFilter({
-                                matchFrom:"start" // "any"
-                            })}
-                            
-
-
+                            menuPlacement={menuPlacement}
+                            ref={field.ref} // ref should be handled by the Controller
+                            hideSelectedOptions={hideSelectedOptions}
+                            filterOption={filterOption}
+                            isDisabled={isDisabled}
+                            isLoading={isLoading}
+                            isMulti={isMulti}
+                            noOptionsMessage={noOptionsMessage}
+                            loadingMessage={loadingMessage}
+                            className={className}
+                            styles={{ container: (provided) => ({ ...provided, width: fullWidth ? '100%' : width }) }}
                         />
                     )}
                 />
@@ -48,11 +60,21 @@ function CommonSelect({
                 <Select
                     className={className}
                     options={options}
-                    onChange={(selectedOption) => onChange(selectedOption)}
+                    label={label}
+                    onChange={(selectedOption) => onChange && onChange(selectedOption)}
                     placeholder={placeholder}
                     isClearable={isClearable}
                     defaultValue={defaultValue}
-                    fullWidth={fullWidth}
+                    menuPlacement={menuPlacement}
+                    ref={ref}
+                    hideSelectedOptions={hideSelectedOptions}
+                    filterOption={filterOption}
+                    isDisabled={isDisabled}
+                    isLoading={isLoading}
+                    isMulti={isMulti}
+                    noOptionsMessage={noOptionsMessage}
+                    loadingMessage={loadingMessage}
+                    styles={{ container: (provided) => ({ ...provided, width: fullWidth ? '100%' : width }) }}
                 />
             )}
         </div>
