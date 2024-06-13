@@ -1,8 +1,9 @@
 import { Modal } from "antd";
 
-const CommonModal = ({ title, content, visible, onCancel,footer  }) => {
+const CommonModal = ({ title, content, visible, onCancel,footer,width  }) => {
     return (
       <Modal
+      width={width}
       
         title={title}
         visible={visible}

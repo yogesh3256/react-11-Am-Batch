@@ -69,6 +69,7 @@ import RecurrsiveMapping from './Component/nestedArrayTask/RecursiveMapping/Recu
 import Addiction from './Component/CustomHooks/Addiction';
 import TodoAppUseContext from './Component/Todo app/todocomponent/TodoAppUseContext';
 import { TodoProvider } from './Component/Todo app/todoContext/TodoProvider';
+import PaginationTableTask from './Component/Pagination Table/PaginationTableTask';
 
 
 
@@ -190,7 +191,7 @@ function App() {
         {/* <RowColSpanTable/> */}
         {/* <DocItLoginForm/> */}
         {/* <DropDownTable/> */}
-        <TableApi/>
+        {/* <TableApi/> */}
         {/* <HookFormTAsk/> */}
         {/* <ArrayMapTask/> */}
         {/* <RecurrsiveMapping/> */}
@@ -204,6 +205,7 @@ function App() {
         {/* <TodoProvider>
           <TodoAppUseContext />
         </TodoProvider> */}
+        <PaginationTableTask/>
 
       </SnackbarProvider>
     </>

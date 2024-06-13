@@ -11,24 +11,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CommonButton from '../../common/Button/CommonButton';
 import StudentModal from './StudentModal';
-import { API_COMMON_URL } from '../../../Http';
 import CommonModal from '../../common/modal/CommonModal';
 import { Button } from 'antd';
+import { API_COMMON_URL } from '../../../Http';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function TableApi() {
     const [data, setData] = useState([]);
-    const [comfirmmationModal,setComfirmattionModal]=useState(false)
-    const [openStudentModal, setStudentModal] = useState(false);
+    const [openStudentModal, setOpenStudentModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
-    const handleOpenComfirmationModal=()=>setComfirmattionModal(true);
-    const handleCloseComfirmationModal=()=>setComfirmattionModal(false);
-
-    const handleOpen = () => setStudentModal(true);
-    const handleClose = () => {
-        setStudentModal(false);
-        setSelectedRow(null);
-
-    };
+    const [confirmationModal, setConfirmationModal] = useState(false);
+    const [selectedRowIdToDelete, setSelectedRowIdToDelete] = useState(null);
 
     useEffect(() => {
         getStudentdata();
@@ -45,111 +39,122 @@ function TableApi() {
             });
     };
 
-    const handleDelete = (id) => {
-         handleOpenComfirmationModal();
-            axios.delete(`${API_COMMON_URL}/deleteStudent/${id}`)
-                .then((res) => {
-                    setData(res.data);
-                    getStudentdata();
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-      
-    };
-
-
     const handleEdit = (row) => {
         setSelectedRow(row);
-       
-        console.log("rowId", row.id);
-        handleOpen();
+        setOpenStudentModal(true);
+    };
+
+    const handleDelete = (id) => {
+        setSelectedRowIdToDelete(id);
+        setConfirmationModal(true);
+    };
+
+    const handleConfirmDelete = () => {
+        axios.delete(`${API_COMMON_URL}/deleteStudent/${selectedRowIdToDelete}`)
+            .then((res) => {
+                setData(data.filter(item => item.id !== selectedRowIdToDelete));
+                setConfirmationModal(false);
+                toast.success("Student deleted successfully!", {
+                    toastStyle: { 'background-color': '#4caf50', color: 'white' },
+                        position: "top-right", // Example: Change position
+                        autoClose: 3000, // Example: Close after 3 seconds
+                        hideProgressBar: false, // Example: Hide progress bar
+                        closeOnClick: true, // Example: Close on click
+                        pauseOnHover: true, // Example: Pause on hover
+                        draggable: false, // Example: Disable dragging  
+                        // Add more options as needed
+
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+                // Handle error as needed
+            });
+    };
+
+    const handleCloseConfirmationModal = () => {
+        setConfirmationModal(false);
+        setSelectedRowIdToDelete(null); // Reset selected row ID
+    };
+
+    const handleCloseStudentModal = () => {
+        setOpenStudentModal(false);
+        setSelectedRow(null);
     };
 
     return (
         <div>
+            <ToastContainer />
             <div className='text-end m-5'>
                 <CommonButton
-                    label='+ADD STUDENT'
+                    label='+ ADD STUDENT'
                     className='bg-black text-white w-36 py-2'
                     type='button'
-                    onClick={handleOpen}
+                    onClick={() => setOpenStudentModal(true)}
                 />
             </div>
-            <div>
-                {
-                    openStudentModal &&
-                    <StudentModal
-                        open={openStudentModal}
-                        handleClose={handleClose}
-                        getStudentdata={getStudentdata}
-                        selectedRow={selectedRow}
-                      
-                        
-                    />
-                }
-            </div>
-            <div>
-                {
-                    comfirmmationModal &&
-                    <CommonModal
-                    visible={comfirmmationModal}
-                    onCancel={handleCloseComfirmationModal}
-                    footer={[
-                        <Button key="cancel" onClick={handleCloseComfirmationModal}>
-                          Cancel
-                        </Button>,
-                        <Button key="submit" type="primary" onClick={handleCloseComfirmationModal}>
-                          OK
-                        </Button>,
-                      ]}
 
-                    />
-           
-                  
-                }
-            </div>
-            {
-                data.length > 0 ?
-                    (
-                        <TableContainer component={Paper}>
-                            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                                <TableHead>
-                                    <TableRow className='bg-gray-200'>
-                                        <TableCell>First Name</TableCell>
-                                        <TableCell align="right">Last Name</TableCell>
-                                        <TableCell align="right">Age</TableCell>
-                                        <TableCell align="right">Standard</TableCell>
-                                        <TableCell align="right">Percentage</TableCell>
-                                        <TableCell align="right">Actions</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        data.map((item) => (
-                                            <TableRow key={item.id}>
-                                                <TableCell component="th">{item.firstName}</TableCell>
-                                                <TableCell align="right">{item.lastName}</TableCell>
-                                                <TableCell align="right">{item.age}</TableCell>
-                                                <TableCell align="right">{item.std}</TableCell>
-                                                <TableCell align="right">{item.percentage}</TableCell>
-                                                <TableCell align="right">
-                                                    <div className='space-x-2'>
-                                                        <EditIcon onClick={() => handleEdit(item)} />
-                                                        <DeleteIcon onClick={() => handleDelete(item.id)} />
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))
-                                    }
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    ) :
-                    (
-                        <h1 className='text-center font-bold text-2xl'> NO record Found....</h1>
-                    )
-            }
+            {openStudentModal && (
+                <StudentModal
+                    open={openStudentModal}
+                    handleClose={handleCloseStudentModal}
+                    getStudentdata={getStudentdata}
+                    selectedRow={selectedRow}
+                />
+            )}
+
+            {confirmationModal && (
+                <CommonModal
+                    visible={confirmationModal}
+                    onCancel={handleCloseConfirmationModal}
+                    width="500px"
+                    content={"Are you Sure to Delete the Item.."}
+                    footer={[
+                        <Button key="cancel" onClick={handleCloseConfirmationModal}>
+                            Cancel
+                        </Button>,
+                        <Button key="submit" type="primary" onClick={handleConfirmDelete}>
+                            OK
+                        </Button>,
+                    ]}
+                />
+            )}
+
+            {data.length > 0 ? (
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                        <TableHead>
+                            <TableRow className='bg-gray-200'>
+                                <TableCell>First Name</TableCell>
+                                <TableCell align="right">Last Name</TableCell>
+                                <TableCell align="right">Age</TableCell>
+                                <TableCell align="right">Standard</TableCell>
+                                <TableCell align="right">Percentage</TableCell>
+                                <TableCell align="right">Actions</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.map((item) => (
+                                <TableRow key={item.id}>
+                                    <TableCell component="th">{item.firstName}</TableCell>
+                                    <TableCell align="right">{item.lastName}</TableCell>
+                                    <TableCell align="right">{item.age}</TableCell>
+                                    <TableCell align="right">{item.std}</TableCell>
+                                    <TableCell align="right">{item.percentage}</TableCell>
+                                    <TableCell align="right">
+                                        <div className='space-x-2'>
+                                            <EditIcon onClick={() => handleEdit(item)} />
+                                            <DeleteIcon onClick={() => handleDelete(item.id)} />
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            ) : (
+                <h1 className='text-center font-bold text-2xl'>NO records found....</h1>
+            )}
         </div>
     );
 }

@@ -7,6 +7,8 @@ import axios from 'axios';
 import CommonTextField from '../../common/TextField/CommonTextField';
 import { CloseOutlined } from '@ant-design/icons';
 import { API_COMMON_URL } from '../../../Http';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
     const { control, reset, handleSubmit, setValue } = useForm();
@@ -37,6 +39,14 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                 .then((res) => {
                     console.log(res.data);
                     getStudentdata();
+                    toast.success("Student updated successfully!", {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar:false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: false,
+                    });
                 })
                 .catch((err) => {
                     console.log(err);
@@ -46,6 +56,14 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                 .then((res) => {
                     console.log(res.data);
                     getStudentdata();
+                    toast.success("Student added successfully!", {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar:false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: false,
+                    });
                 })
                 .catch((err) => {
                     console.log(err);
