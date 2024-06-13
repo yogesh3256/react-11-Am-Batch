@@ -188,9 +188,9 @@ function App() {
 
         {/* <AxiosFetchApi/> */}
         {/* <RowColSpanTable/> */}
-        <DocItLoginForm/>
+        {/* <DocItLoginForm/> */}
         {/* <DropDownTable/> */}
-        {/* <TableApi/> */}
+        <TableApi/>
         {/* <HookFormTAsk/> */}
         {/* <ArrayMapTask/> */}
         {/* <RecurrsiveMapping/> */}

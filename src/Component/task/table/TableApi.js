@@ -12,12 +12,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import CommonButton from '../../common/Button/CommonButton';
 import StudentModal from './StudentModal';
 import { API_COMMON_URL } from '../../../Http';
+import CommonModal from '../../common/modal/CommonModal';
+import { Button } from 'antd';
 
 function TableApi() {
     const [data, setData] = useState([]);
+    const [comfirmmationModal,setComfirmattionModal]=useState(false)
     const [openStudentModal, setStudentModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
-    const [selectedId, setSelectedId] = useState(null);
+    const handleOpenComfirmationModal=()=>setComfirmattionModal(true);
+    const handleCloseComfirmationModal=()=>setComfirmattionModal(false);
 
     const handleOpen = () => setStudentModal(true);
     const handleClose = () => {
@@ -42,7 +46,7 @@ function TableApi() {
     };
 
     const handleDelete = (id) => {
-        if (window.confirm("Are you sure you want to delete this student?")) {
+         handleOpenComfirmationModal();
             axios.delete(`${API_COMMON_URL}/deleteStudent/${id}`)
                 .then((res) => {
                     setData(res.data);
@@ -51,13 +55,13 @@ function TableApi() {
                 .catch((err) => {
                     console.log(err);
                 });
-        }
+      
     };
 
 
     const handleEdit = (row) => {
         setSelectedRow(row);
-        setSelectedId(row.id);
+       
         console.log("rowId", row.id);
         handleOpen();
     };
@@ -80,9 +84,29 @@ function TableApi() {
                         handleClose={handleClose}
                         getStudentdata={getStudentdata}
                         selectedRow={selectedRow}
-                        selectedId={selectedId}
-                        setSelectedId={setSelectedId}
+                      
+                        
                     />
+                }
+            </div>
+            <div>
+                {
+                    comfirmmationModal &&
+                    <CommonModal
+                    visible={comfirmmationModal}
+                    onCancel={handleCloseComfirmationModal}
+                    footer={[
+                        <Button key="cancel" onClick={handleCloseComfirmationModal}>
+                          Cancel
+                        </Button>,
+                        <Button key="submit" type="primary" onClick={handleCloseComfirmationModal}>
+                          OK
+                        </Button>,
+                      ]}
+
+                    />
+           
+                  
                 }
             </div>
             {

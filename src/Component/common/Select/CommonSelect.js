@@ -22,7 +22,8 @@ function CommonSelect({
     isLoading = false,
     isMulti = false,
     noOptionsMessage = () => 'No options available',
-    loadingMessage = () => 'Loading...'
+    loadingMessage = () => 'Loading...',
+    isSearchable= false
 }) {
     return (
         <div style={{ width: width }}>
@@ -52,6 +53,7 @@ function CommonSelect({
                             noOptionsMessage={noOptionsMessage}
                             loadingMessage={loadingMessage}
                             className={className}
+                            isSearchable={isSearchable}
                             styles={{ container: (provided) => ({ ...provided, width: fullWidth ? '100%' : width }) }}
                         />
                     )}

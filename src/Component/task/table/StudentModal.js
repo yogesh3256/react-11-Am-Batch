@@ -8,10 +8,7 @@ import CommonTextField from '../../common/TextField/CommonTextField';
 import { CloseOutlined } from '@ant-design/icons';
 import { API_COMMON_URL } from '../../../Http';
 
-function StudentModal({ open, handleClose, getStudentdata, selectedRow, selectedId, setSelectedId }) {
-    
-   
-
+function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
     const { control, reset, handleSubmit, setValue } = useForm();
 
     useEffect(() => {
@@ -21,15 +18,13 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow, selected
             setValue('age', selectedRow.age);
             setValue('standard', selectedRow.std);
             setValue('percentage', selectedRow.percentage);
-            setSelectedId(selectedRow.id); 
         } else {
             reset();
         }
-    }, [selectedRow, setValue, reset, setSelectedId]);
+    }, [selectedRow, setValue, reset]);
 
     const onSubmit = (data) => {
         const tempObj = {
-            id: selectedId,
             firstName: data.firstname,
             lastName: data.lastname,
             age: data.age,
@@ -38,7 +33,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow, selected
         };
 
         if (selectedRow) {
-            axios.put(`${API_COMMON_URL}/updateStudent/${selectedId}`, tempObj)
+            axios.put(`${API_COMMON_URL}/updateStudent/${selectedRow.id}`, tempObj)
                 .then((res) => {
                     console.log(res.data);
                     getStudentdata();
@@ -59,7 +54,6 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow, selected
 
         reset();
         handleClose();
-        setSelectedId(null);
     };
 
     return (

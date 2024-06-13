@@ -12,7 +12,9 @@ function CommonTextField({
   className,
   type,
   inputProps,
-  onChange
+  onChange,
+  autoFocus
+  
 }) {
   return control ? (
     <Controller
@@ -28,6 +30,7 @@ function CommonTextField({
           size={size}
           fullWidth={fullWidth}
           inputProps={inputProps}
+          autoFocus={autoFocus}
         />
       )}
     />

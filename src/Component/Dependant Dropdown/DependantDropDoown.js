@@ -132,6 +132,7 @@ function DependantDropDown(props) {
                                         hideSelectedOptions={true}
                                         noOptionsMessage={()=>'No options available'}
                                         filterOption={createFilter({matchFrom:'any'})}
+                                        isSearchable={true}
                                         loadingMessage={()=>'Loading...'}
                                         label="Country"
                                          
@@ -150,6 +151,12 @@ function DependantDropDown(props) {
                                         isClearable={true}
                                         control={control}
                                         options={state}
+                                        menuPlacement="bottom"
+                                        hideSelectedOptions={true}
+                                        noOptionsMessage={()=>'No options available'}
+                                        filterOption={createFilter({matchFrom:'any'})}
+                                        isSearchable={true}
+                                        loadingMessage={()=>'Loading...'}
                                         label="State"
                                         
                                         placeholder='Select the State'
@@ -161,6 +168,12 @@ function DependantDropDown(props) {
                                         isClearable={true}
                                         control={control}
                                         options={district}
+                                        menuPlacement="bottom"
+                                        hideSelectedOptions={true}
+                                        noOptionsMessage={()=>'No options available'}
+                                        filterOption={createFilter({matchFrom:'any'})}
+                                        isSearchable={true}
+                                        loadingMessage={()=>'Loading...'}
                                         label="District"
                                         
                                         placeholder='Select the District'
@@ -172,6 +185,12 @@ function DependantDropDown(props) {
                                         isClearable={true}
                                         control={control}
                                         options={taluka}
+                                        menuPlacement="bottom"
+                                        hideSelectedOptions={true}
+                                        noOptionsMessage={()=>'No options available'}
+                                        filterOption={createFilter({matchFrom:'any'})}
+                                        isSearchable={true}
+                                        loadingMessage={()=>'Loading...'}
                                         label="Taluka"
                                         
                                         placeholder='Select the Taluka'
@@ -182,8 +201,14 @@ function DependantDropDown(props) {
                                         name='city'
                                         isClearable={true}
                                         control={control}
-                                        label="City"
                                         options={city}
+                                        menuPlacement="bottom"
+                                        hideSelectedOptions={true}
+                                        noOptionsMessage={()=>'No options available'}
+                                        filterOption={createFilter({matchFrom:'any'})}
+                                        isSearchable={true}
+                                        loadingMessage={()=>'Loading...'}
+                                        label="City"
                                          
                                         placeholder='Select the City'
                                     />
@@ -195,6 +220,7 @@ function DependantDropDown(props) {
                                         label="Pincode"
                                         size='small'
                                         fullWidth={true}
+                                        autoFocus={true}
                                     />
                                 </div>
                             </div>
