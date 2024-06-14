@@ -1,192 +1,194 @@
-import * as React from 'react';
-import { styled } from '@mui/system';
-import TablePagination, { tablePaginationClasses as classes } from '@mui/material/TablePagination';
+import React, { useRef, useState, useEffect, useMemo } from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 
-export default function CommonPaginationTable({
-  data,
-  rowsPerPageOptions = [5, 10, 25, { label: 'All', value: -1 }],
-  colSpan = 3,
-  count,
-  rowsPerPage: initialRowsPerPage = 5,
-  page: initialPage = 0,
-  onPageChange,
-  onRowsPerPageChange,
-  className // Added prop for custom styling
-}) {
-  const [page, setPage] = React.useState(initialPage);
-  const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
+function CommonPaginationTable(props) {
+    const {
+        DataResult,
+        rowsPerPageOptions = [5, 10, 25],
+        defaultRowsPerPage = 5,
+        defaultPage = 1,
+        paginationColor = "secondary",
+        shape, // Default shape is 'circular'
+        paginationVariant = "text",
+        paginationSize = "medium",
+        count,
+        showLastButton = false,
+        showFirstButton = false,
+        selectSize = "medium", // New prop for Select size
+        hiddenColumns = [], // New prop to hide specific columns
+        className
+    } = props;
 
-  // Extract headers from the first object in data (assuming all objects have the same structure)
-  const headers = React.useMemo(() => {
-    if (data.length > 0) {
-      return Object.keys(data[0]).filter((header) => !['id', 'status'].includes(header));
-       
-    }
-    return [];
-  }, [data]);
+    const [selectedIndex, setSelectedIndex] = useState(-1);
+    const [page, setPage] = useState(defaultPage);
+    const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+    const tableRef = useRef(null);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    onPageChange && onPageChange(event, newPage);
-  };
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (DataResult?.length > 0) {
+                if (event.key === "ArrowUp" && selectedIndex > 0) {
+                    setSelectedIndex((prevIndex) => prevIndex - 1);
+                } else if (
+                    event.key === "ArrowDown" &&
+                    selectedIndex < DataResult.length - 1
+                ) {
+                    setSelectedIndex((prevIndex) => prevIndex + 1);
+                }
+            }
+        };
 
-  const handleChangeRowsPerPage = (event) => {
-    const newRowsPerPage = parseInt(event.target.value, 10);
-    setRowsPerPage(newRowsPerPage);
-    setPage(0);
-    onRowsPerPageChange && onRowsPerPageChange(event, newRowsPerPage);
-  };
+        window.addEventListener("keydown", handleKeyDown);
 
-  const renderCellContent = (content, header) => {
-    if (typeof content === 'object' && content !== null) {
-      if (Array.isArray(content)) {
-        return content.map(item => renderCellContent(item)).join(', ');
-      }
-      // Special handling for 'country' and 'state' fields
-      if (header === 'country') {
-        return content?.country_name; // Assuming 'name' is the field containing the readable name
-      }
-      if (header === 'state') {
-        return content?.state_name; // Assuming 'name' is the field containing the readable name
-      }
-      // Filter out 'id' and 'status' fields, and any nested objects
-      return Object.entries(content)
-        .filter(([key, value]) => !['id', 'status'].includes(key) && typeof value !== 'object')
-        .map(([key, value]) => value)
-        .join(', ');
-    }
-    return content;
-  };
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [selectedIndex, DataResult]);
 
-  return (
-    <>
-      {
-        data?.length > 0 ? (
-          <div className={className} style={{ overflowX: 'auto', overflowY: 'auto' }}>
-            <Root sx={{ maxWidth: '100%', width: 500 }}>
-              <table aria-label="custom pagination table">
-                <thead>
-                  <tr>
-                    {headers.map((header, index) => (
-                      <th className='text-center' key={index}>{header}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {(rowsPerPage > 0
-                    ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : data
-                  ).map((row, index) => (
-                    <tr key={index}>
-                      {headers.map((header, index) => (
-                        <td key={`${index}-${header}`}>
-                          {renderCellContent(row[header], header)}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                  {emptyRows > 0 && (
-                    <tr style={{ height: 41 * emptyRows }}>
-                      <td colSpan={headers.length} aria-hidden />
-                    </tr>
-                  )}
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <CustomTablePagination
-                      rowsPerPageOptions={rowsPerPageOptions}
-                      colSpan={colSpan}
-                      count={count || data.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </tr>
-                </tfoot>
-              </table>
-            </Root>
-          </div>
-        ) : (
-          <h1 className='text-2xl font-bold text-center my-20'>No Records Found...</h1>
-        )
-      }
-    </>
-  );
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(1); // Reset to the first page when rows per page change
+    };
+
+    const extractTextValues = (obj) => {
+        let result = [];
+        const traverse = (node) => {
+            if (typeof node === 'string') {
+                result.push(node);
+            } else if (typeof node === 'object' && node !== null) {
+                for (let key in node) {
+                    if (node.hasOwnProperty(key)) {
+                        traverse(node[key]);
+                    }
+                }
+            }
+        };
+        traverse(obj);
+        return result.join(', ');
+    };
+
+    // Memoize visibleHeaders
+    const memoizedVisibleHeaders = useMemo(() => {
+        let headers = [];
+        if (DataResult?.length > 0) {
+            DataResult?.forEach((list) => {
+                let temp = Object.keys(list);
+                temp.forEach((key) => {
+                    if (!headers.includes(key) && !hiddenColumns.includes(key)) {
+                        headers.push(key);
+                    }
+                });
+            });
+        }
+        return headers;
+    }, [DataResult, hiddenColumns]);
+
+    const memoizedPageCount = useMemo(() => {
+        const totalItemCount = count ? count : DataResult.length;
+        return Math.ceil(totalItemCount / rowsPerPage);
+    }, [count, DataResult, rowsPerPage]);
+
+    return (
+        <div className={className}>
+            {DataResult?.length > 0 ? (
+                <>
+                    <TableContainer
+                        component={Paper}
+                        sx={{ border: "1px solid lightgray" }}
+                    >
+                        <Table
+                            ref={tableRef}
+                            sx={{ minWidth: 650, borderCollapse: "collapse" }}
+                            size="small"
+                            aria-label="a dense table"
+                        >
+                            <TableHead>
+                                <TableRow sx={{ background: "lightgray" }}>
+                                    {memoizedVisibleHeaders.map((header, index) => (
+                                        <TableCell key={index} sx={{ border: "1px solid black", textAlign:"center",font:'bold' }}>{header}</TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {DataResult.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((row, rowIndex) => (
+                                    <TableRow
+                                        key={rowIndex}
+                                        sx={{
+                                            backgroundColor:
+                                                rowIndex + (page - 1) * rowsPerPage === selectedIndex ? "lightblue" : "inherit",
+                                            '&:hover': {
+                                                backgroundColor: 'lightyellow', // Example hover effect
+                                            },
+                                            border: "1px solid lightgray"
+                                        }}
+                                    >
+                                        {memoizedVisibleHeaders.map((header, cellIndex) => (
+                                            <TableCell key={cellIndex} sx={{ border: "1px solid lightgray",textAlign:"center"}}>
+                                                {typeof row[header] === 'object' ? extractTextValues(row[header]) : row[header]}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <Stack direction="row" spacing={2} sx={{ marginTop: 2, alignItems: "center", justifyContent: "center" }}>
+                        <Pagination
+                            count={memoizedPageCount}
+                            page={page}
+                            onChange={handleChangePage}
+                            color={paginationColor}
+                            shape={shape} // Dynamic shape based on props
+                            variant={paginationVariant}
+                            size={paginationSize}
+                            showFirstButton={showFirstButton}
+                            showLastButton={showLastButton}
+                        />
+                        <FormControl sx={{ minWidth: 120 }}>
+                            <InputLabel>Rows per page</InputLabel>
+                            <Select
+                                value={rowsPerPage}
+                                onChange={handleChangeRowsPerPage}
+                                label="Rows per page"
+                                size={selectSize} // Set size dynamically
+                            >
+                                {rowsPerPageOptions.map((option) =>
+                                    typeof option === 'object' ? (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ) : (
+                                        <MenuItem key={option} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    )
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Stack>
+                </>
+            ) : (
+                <p className="text-center my-28">No Record Found...</p>
+            )}
+        </div>
+    );
 }
 
-const Root = styled('div')(
-  ({ theme }) => `
-  table {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 0.875rem;
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  td,
-  th {
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
-    text-align: left;
-    padding: 8px;
-  }
-
-  th {
-    background-color: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-  }
-  `,
-);
-
-const grey = {
-  50: '#F3F6F9',
-  100: '#E5EAF2',
-  200: '#DAE2ED',
-  300: '#C7D0DD',
-  400: '#B0B8C4',
-  500: '#9DA8B7',
-  600: '#6B7A90',
-  700: '#434D5B',
-  800: '#303740',
-  900: '#1C2025',
-};
-
-const CustomTablePagination = styled(TablePagination)`
-  & .${classes.toolbar} {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-
-    @media (min-width: 768px) {
-      flex-direction: row;
-      align-items: center;
-    }
-  }
-
-  & .${classes.selectLabel} {
-    margin: 0;
-  }
-
-  & .${classes.displayedRows} {
-    margin: 0;
-
-    @media (min-width: 768px) {
-      margin-left: auto;
-    }
-  }
-
-  & .${classes.spacer} {
-    display: none;
-  }
-
-  & .${classes.actions} {
-    display: flex;
-    gap: 0.25rem;
-  }
-`;
-
- 
+export default CommonPaginationTable;
