@@ -5,10 +5,11 @@ import CommonPaginationTable from '../common/PaginationTable/CommonPAginationTab
 
 function PaginationTableTask() {
   const [usersData, setUsersData] = useState([])
-
+const[page,setPage]=useState(1)
+const[limitPerPage,setLimitPerPage]=useState(5)
   console.log("usersData", usersData);
   useEffect(() => {
-    axios.get(`http://192.168.0.93:8080/registration/getAllUsers`)
+    axios.get(`http://192.168.0.93:8080/registration/getUser/pagination?page=${page}&size=${limitPerPage}`)
       .then((res) => {
         setUsersData(res.data)
 
@@ -30,7 +31,6 @@ function PaginationTableTask() {
         selectSize={'small'}
         showFirstButton={true}
         showLastButton={true}
- 
         count={8}
 
 

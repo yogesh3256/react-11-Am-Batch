@@ -95,6 +95,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                                 label='First Name'
                                 size='small'
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}
                             />
                         </div>
                         <div>
@@ -106,6 +107,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                                 size='small'
                                 type='text'
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}
                             />
                         </div>
                         <div>
@@ -117,6 +119,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                                 size='small'
                                 type='text'
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}
                             />
                         </div>
                         <div>
@@ -128,6 +131,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                                 size='small'
                                 type='text'
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}
                             />
                         </div>
                         <div>
@@ -139,6 +143,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                                 size='small'
                                 type='text'
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}
                             />
                         </div>
                     </div>

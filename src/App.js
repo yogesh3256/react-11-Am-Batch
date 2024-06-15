@@ -70,6 +70,7 @@ import Addiction from './Component/CustomHooks/Addiction';
 import TodoAppUseContext from './Component/Todo app/todocomponent/TodoAppUseContext';
 import { TodoProvider } from './Component/Todo app/todoContext/TodoProvider';
 import PaginationTableTask from './Component/Pagination Table/PaginationTableTask';
+import PaginationWithApi from './Component/Pagination Table/PaginationWithApi';
 
 
 
@@ -205,7 +206,8 @@ function App() {
         {/* <TodoProvider>
           <TodoAppUseContext />
         </TodoProvider> */}
-        <PaginationTableTask/>
+        {/* <PaginationTableTask/> */}
+        <PaginationWithApi/>
 
       </SnackbarProvider>
     </>

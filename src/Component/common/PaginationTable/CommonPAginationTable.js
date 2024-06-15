@@ -28,12 +28,14 @@ function CommonPaginationTable(props) {
         showFirstButton = false,
         selectSize = "medium", // New prop for Select size
         hiddenColumns = [], // New prop to hide specific columns
-        className
+        className,
+        initialRowsPerPage,
+        initialPage,
     } = props;
 
     const [selectedIndex, setSelectedIndex] = useState(-1);
-    const [page, setPage] = useState(defaultPage);
-    const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
+    const [page, setPage] = useState(initialPage || defaultPage);
+    const [rowsPerPage, setRowsPerPage] = useState(initialRowsPerPage || defaultRowsPerPage);
 
     const tableRef = useRef(null);
 
