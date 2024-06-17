@@ -14,7 +14,8 @@ function CommonTextField({
   inputProps,
   onChange,
   autoFocus,
-  InputLabelProps
+  InputLabelProps,
+  error
   
 }) {
   return control ? (
@@ -25,6 +26,7 @@ function CommonTextField({
       render={({ field }) => (
         <TextField
           {...field}
+          error={error}
           label={label}
           className={className}
           type={type}

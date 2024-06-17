@@ -52,7 +52,8 @@ function TableApi() {
     const handleConfirmDelete = () => {
         axios.delete(`${API_COMMON_URL}/deleteStudent/${selectedRowIdToDelete}`)
             .then((res) => {
-                setData(data.filter(item => item.id !== selectedRowIdToDelete));
+               let filteredData =data.filter(item=>item.id !== selectedRowIdToDelete)
+               setData(filteredData)
                 setConfirmationModal(false);
                 toast.success("Student deleted successfully!", {
                     toastStyle: { 'background-color': '#4caf50', color: 'white' },
@@ -87,8 +88,8 @@ function TableApi() {
             <ToastContainer />
             <div className='text-end m-5'>
                 <CommonButton
-                    label='+ ADD STUDENT'
-                    className='bg-black text-white w-36 py-2'
+                    label='+ADD'
+                    className='bg-black text-white px-2 h-9  w-16 rounded'
                     type='button'
                     onClick={() => setOpenStudentModal(true)}
                 />
@@ -105,17 +106,22 @@ function TableApi() {
 
             {confirmationModal && (
                 <CommonModal
-                    visible={confirmationModal}
+                open={confirmationModal}
                     onCancel={handleCloseConfirmationModal}
                     width="500px"
                     content={"Are you Sure to Delete the Item.."}
                     footer={[
-                        <Button key="cancel" onClick={handleCloseConfirmationModal}>
-                            Cancel
-                        </Button>,
-                        <Button key="submit" type="primary" onClick={handleConfirmDelete}>
-                            OK
-                        </Button>,
+                       <CommonButton
+                       label='Cancel'onClick={handleCloseConfirmationModal}
+                       className='bg-red-500 text-white px-1 py-1 rounded h-8 w-16 mr-3'
+                       
+                       />
+                       ,
+                       <CommonButton
+                       label='Ok'onClick={handleConfirmDelete}
+                       className='bg-green-600 text-white px-1 py-1  rounded h-8 w-16'
+                       
+                       />
                     ]}
                 />
             )}

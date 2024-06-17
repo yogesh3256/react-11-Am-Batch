@@ -192,7 +192,7 @@ function App() {
         {/* <RowColSpanTable/> */}
         {/* <DocItLoginForm/> */}
         {/* <DropDownTable/> */}
-        {/* <TableApi/> */}
+        <TableApi/>
         {/* <HookFormTAsk/> */}
         {/* <ArrayMapTask/> */}
         {/* <RecurrsiveMapping/> */}
@@ -207,7 +207,7 @@ function App() {
           <TodoAppUseContext />
         </TodoProvider> */}
         {/* <PaginationTableTask/> */}
-        <PaginationWithApi/>
+        {/* <PaginationWithApi/> */}
 
       </SnackbarProvider>
     </>

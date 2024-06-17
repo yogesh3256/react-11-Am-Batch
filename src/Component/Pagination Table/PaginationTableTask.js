@@ -9,7 +9,7 @@ const[page,setPage]=useState(1)
 const[limitPerPage,setLimitPerPage]=useState(5)
   console.log("usersData", usersData);
   useEffect(() => {
-    axios.get(`http://192.168.0.93:8080/registration/getUser/pagination?page=${page}&size=${limitPerPage}`)
+    axios.get(`http://192.168.50.12:8080/registration/getAllUsers`)
       .then((res) => {
         setUsersData(res.data)
 

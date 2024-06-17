@@ -4,6 +4,8 @@ import { Modal } from 'antd';
 import { useForm } from 'react-hook-form';
 import CommonButton from '../../common/Button/CommonButton';
 import axios from 'axios';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import CommonTextField from '../../common/TextField/CommonTextField';
 import { CloseOutlined } from '@ant-design/icons';
 import { API_COMMON_URL } from '../../../Http';
@@ -11,7 +13,36 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
-    const { control, reset, handleSubmit, setValue } = useForm();
+    const schemaValidation = yup.object().shape({
+        firstname: yup
+            .string()
+            .required('Firstname is required')
+            .min(2, 'Firstname must be at least 2 characters')
+            .max(50, 'Firstname cannot be more than 50 characters'),
+        lastname: yup
+            .string()
+            .required('Lastname is required')
+            .min(2, 'Lastname must be at least 2 characters')
+            .max(50, 'Lastname cannot be more than 50 characters'),
+        age: yup
+            .number()
+            .required('Age is required')
+            .min(0, 'Age must be at least 0')
+            .max(120, 'Age cannot be more than 120'),
+        standard: yup
+            .string()
+            .required('Standard is required'),
+             
+        percentage: yup
+            .number()
+            .required('Percentage is required')
+            .min(0, 'Percentage must be at least 0')
+            .max(100, 'Percentage cannot be more than 100')
+    });
+
+    const { control, reset, handleSubmit, setValue, formState:{errors} } = useForm({
+        resolver: yupResolver(schemaValidation)
+    });
 
     useEffect(() => {
         if (selectedRow) {
@@ -42,7 +73,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                     toast.success("Student updated successfully!", {
                         position: "top-right",
                         autoClose: 3000,
-                        hideProgressBar:false,
+                        hideProgressBar: false,
                         closeOnClick: true,
                         pauseOnHover: true,
                         draggable: false,
@@ -59,7 +90,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                     toast.success("Student added successfully!", {
                         position: "top-right",
                         autoClose: 3000,
-                        hideProgressBar:false,
+                        hideProgressBar: false,
                         closeOnClick: true,
                         pauseOnHover: true,
                         draggable: false,
@@ -89,6 +120,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                         <div>
                             <CommonTextField
                                 name='firstname'
+                                error={!!errors.firstname}
                                 type='text'
                                 defaultValue=''
                                 control={control}
@@ -100,6 +132,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                         </div>
                         <div>
                             <CommonTextField
+                            error={!!errors.lastname}
                                 name='lastname'
                                 control={control}
                                 defaultValue=''
@@ -112,18 +145,20 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                         </div>
                         <div>
                             <CommonTextField
+                            error={!!errors.age}
                                 name='age'
                                 control={control}
                                 defaultValue=''
                                 label='Age'
                                 size='small'
-                                type='text'
+                                type='number'
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
                             />
                         </div>
                         <div>
                             <CommonTextField
+                            error={!!errors.standard}
                                 name='standard'
                                 control={control}
                                 defaultValue=''
@@ -136,12 +171,13 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                         </div>
                         <div>
                             <CommonTextField
+                            error={!!errors.percentage}
                                 name='percentage'
                                 control={control}
                                 defaultValue=''
                                 label='Percentage'
                                 size='small'
-                                type='text'
+                                type='number'
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
                             />
@@ -151,7 +187,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                         <CommonButton
                             label={selectedRow ? 'Update' : 'Add'}
                             type='submit'
-                            className='bg-green-500 text-white px-4 font-semibold'
+                            className='bg-green-500 text-white px-1 h-8 w-16 font-semibold rounded'
                         />
                     </div>
                 </form>
