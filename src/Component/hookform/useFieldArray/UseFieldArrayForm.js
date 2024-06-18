@@ -60,6 +60,7 @@ const UseFieldArrayForm = () => {
         <Box display="flex" alignItems="center" mb={2}>
           <TextField
             id="numberOfTopFields"
+            name='numberOfTopFields'
             label="Number of Top-Level Fields"
             type="number"
             {...register('numberOfTopFields')}

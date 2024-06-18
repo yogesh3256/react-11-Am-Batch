@@ -1,8 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { API_COMMON_URL } from '../../Http';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from '@mui/material';
 import { fetchData } from '../Services/PaginationTable';
 
@@ -87,7 +84,7 @@ function PaginationWithApi() {
                     />
                 </Paper>
             ) : (
-                <h1 className='font-bold text-xl text-center my-24'>NO Records Found....</h1>
+                <h1 className='font-semibold text-xl text-center my-24'>No Records Found....</h1>
             )}
         </div>
     );

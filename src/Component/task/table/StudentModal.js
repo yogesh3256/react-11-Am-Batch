@@ -11,8 +11,8 @@ import { CloseOutlined } from '@ant-design/icons';
 import { API_COMMON_URL } from '../../../Http';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
+import { postStudentData, putStudentData } from '../../Services/Student';
+function StudentModal({ open, handleClose, getStudents, selectedRow, formData }) {
     const schemaValidation = yup.object().shape({
         firstname: yup
             .string()
@@ -32,7 +32,6 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
         standard: yup
             .string()
             .required('Standard is required'),
-             
         percentage: yup
             .number()
             .required('Percentage is required')
@@ -40,7 +39,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
             .max(100, 'Percentage cannot be more than 100')
     });
 
-    const { control, reset, handleSubmit, setValue, formState:{errors} } = useForm({
+    const { control, reset, handleSubmit, setValue, formState: { errors } } = useForm({
         resolver: yupResolver(schemaValidation)
     });
 
@@ -56,20 +55,40 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
         }
     }, [selectedRow, setValue, reset]);
 
+
     const onSubmit = (data) => {
         const tempObj = {
-            firstName: data.firstname,
-            lastName: data.lastname,
+            firstName: data.firstname.toLowerCase(),
+            lastName: data.lastname.toLowerCase(),
             age: data.age,
-            std: data.standard,
+            std: data.standard.toLowerCase(),
             percentage: data.percentage
         };
 
+        // Check for duplicates
+        const isDuplicate = formData.some(student =>
+            student.firstName.toLowerCase() === tempObj.firstName &&
+            student.lastName.toLowerCase() === tempObj.lastName &&
+            (selectedRow ? student.id !== selectedRow.id : true)
+        );
+
+        if (isDuplicate) {
+            toast.warning("Duplicate entry detected!", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: false,
+                theme: "colored"
+            });
+            return;
+        }
+
         if (selectedRow) {
-            axios.put(`${API_COMMON_URL}/updateStudent/${selectedRow.id}`, tempObj)
+            putStudentData(selectedRow, tempObj)
                 .then((res) => {
-                    console.log(res.data);
-                    getStudentdata();
+                    getStudents();
                     toast.success("Student updated successfully!", {
                         position: "top-right",
                         autoClose: 3000,
@@ -77,16 +96,17 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                         closeOnClick: true,
                         pauseOnHover: true,
                         draggable: false,
+                        theme: "colored"
                     });
+                    handleClose();
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         } else {
-            axios.post(`${API_COMMON_URL}/student/save`, tempObj)
+            postStudentData(tempObj)
                 .then((res) => {
-                    console.log(res.data);
-                    getStudentdata();
+                    getStudents();
                     toast.success("Student added successfully!", {
                         position: "top-right",
                         autoClose: 3000,
@@ -94,7 +114,9 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                         closeOnClick: true,
                         pauseOnHover: true,
                         draggable: false,
+                        theme: "colored"
                     });
+                    handleClose();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -102,7 +124,6 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
         }
 
         reset();
-        handleClose();
     };
 
     return (
@@ -111,7 +132,9 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
             onCancel={handleClose}
             footer={null}
             centered
-            closeIcon={<CloseOutlined style={{ color: 'red', fontSize: '16px', border: '1px solid red', borderRadius: '5px', padding: '5px' }} />}
+            closeIcon={<CloseOutlined
+                style={{ color: 'red', fontSize: '16px', border: '1px solid red', borderRadius: '5px', padding: '5px' }}
+            />}
             width={1000}
         >
             <Box>
@@ -127,12 +150,14 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                                 label='First Name'
                                 size='small'
                                 fullWidth
-                                InputLabelProps={{ shrink: true }}
+                                
+
                             />
                         </div>
                         <div>
                             <CommonTextField
-                            error={!!errors.lastname}
+                                error={!!errors.lastname}
+
                                 name='lastname'
                                 control={control}
                                 defaultValue=''
@@ -140,12 +165,12 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                                 size='small'
                                 type='text'
                                 fullWidth
-                                InputLabelProps={{ shrink: true }}
+
                             />
                         </div>
                         <div>
                             <CommonTextField
-                            error={!!errors.age}
+                                error={!!errors.age}
                                 name='age'
                                 control={control}
                                 defaultValue=''
@@ -153,12 +178,13 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                                 size='small'
                                 type='number'
                                 fullWidth
-                                InputLabelProps={{ shrink: true }}
+                               
                             />
                         </div>
                         <div>
                             <CommonTextField
-                            error={!!errors.standard}
+                                error={!!errors.standard}
+
                                 name='standard'
                                 control={control}
                                 defaultValue=''
@@ -166,12 +192,13 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                                 size='small'
                                 type='text'
                                 fullWidth
-                                InputLabelProps={{ shrink: true }}
+
                             />
                         </div>
                         <div>
                             <CommonTextField
-                            error={!!errors.percentage}
+                                error={!!errors.percentage}
+
                                 name='percentage'
                                 control={control}
                                 defaultValue=''
@@ -179,7 +206,7 @@ function StudentModal({ open, handleClose, getStudentdata, selectedRow }) {
                                 size='small'
                                 type='number'
                                 fullWidth
-                                InputLabelProps={{ shrink: true }}
+
                             />
                         </div>
                     </div>

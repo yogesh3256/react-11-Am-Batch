@@ -71,6 +71,9 @@ import TodoAppUseContext from './Component/Todo app/todocomponent/TodoAppUseCont
 import { TodoProvider } from './Component/Todo app/todoContext/TodoProvider';
 import PaginationTableTask from './Component/Pagination Table/PaginationTableTask';
 import PaginationWithApi from './Component/Pagination Table/PaginationWithApi';
+import HookFormPropTest from './Component/hookform/HookFormPropTest';
+import DrawerDashBoard from './Component/practice/drawer/DrawerDashBoard';
+
 
 
 
@@ -181,7 +184,8 @@ function App() {
         {/* 
  <ParrentTab/> */}
         {/* <UseFieldArrayForm/> */}
-
+{/* <HookFormPropTest/> */}
+<DrawerDashBoard/>
 
         {/* <DateTaskForm/> */}
 
@@ -192,7 +196,7 @@ function App() {
         {/* <RowColSpanTable/> */}
         {/* <DocItLoginForm/> */}
         {/* <DropDownTable/> */}
-        <TableApi/>
+        {/* <TableApi/> */}
         {/* <HookFormTAsk/> */}
         {/* <ArrayMapTask/> */}
         {/* <RecurrsiveMapping/> */}
@@ -207,7 +211,8 @@ function App() {
           <TodoAppUseContext />
         </TodoProvider> */}
         {/* <PaginationTableTask/> */}
-        {/* <PaginationWithApi/> */}
+        {/* <PaginationWithApi /> */}
+
 
       </SnackbarProvider>
     </>

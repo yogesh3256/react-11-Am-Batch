@@ -8,21 +8,22 @@ function CommonTextField({
   size,
   fullWidth,
   label,
-  value,
+  value,  // Ensure this is defined
   className,
   type,
   inputProps,
   onChange,
   autoFocus,
   InputLabelProps,
-  error
-  
+  error,
+  onBlur,
+  sx
 }) {
   return control ? (
     <Controller
       name={name}
       control={control}
-      value={value}
+      defaultValue={value || ''}  // Set a default value for controlled input
       render={({ field }) => (
         <TextField
           {...field}
@@ -31,6 +32,16 @@ function CommonTextField({
           className={className}
           type={type}
           size={size}
+          sx={{
+            '& input[type=number]': {
+                '-moz-appearance': 'textfield', // Firefox
+            },
+            '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                '-webkit-appearance': 'none', // Chrome, Safari, Edge, Opera
+                margin: 0,
+            },
+        }}
+          onBlur={onBlur}
           fullWidth={fullWidth}
           inputProps={inputProps}
           InputLabelProps={InputLabelProps}
@@ -47,7 +58,7 @@ function CommonTextField({
       size={size}
       onChange={onChange}
       fullWidth={fullWidth}
-       value={value}
+      value={value || ''}  // Ensure value is defined
       inputProps={inputProps}
     />
   );

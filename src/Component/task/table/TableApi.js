@@ -12,33 +12,30 @@ import EditIcon from '@mui/icons-material/Edit';
 import CommonButton from '../../common/Button/CommonButton';
 import StudentModal from './StudentModal';
 import CommonModal from '../../common/modal/CommonModal';
-import { Button } from 'antd';
-import { API_COMMON_URL } from '../../../Http';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { deleteStudent, getStudentdata } from '../../Services/Student';
 
 function TableApi() {
-    const [data, setData] = useState([]);
+    const [formData, setFormData] = useState([]);
     const [openStudentModal, setOpenStudentModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
     const [confirmationModal, setConfirmationModal] = useState(false);
     const [selectedRowIdToDelete, setSelectedRowIdToDelete] = useState(null);
 
     useEffect(() => {
-        getStudentdata();
+        getStudents()
     }, []);
-
-    const getStudentdata = () => {
-        axios.get(`${API_COMMON_URL}/StudentsList`)
+    const getStudents =()=>{
+        getStudentdata()
             .then((res) => {
-                setData(res.data);
-                console.log(res.data);
+                setFormData(res);
+
             })
             .catch((err) => {
                 console.log(err);
             });
-    };
-
+    }
     const handleEdit = (row) => {
         setSelectedRow(row);
         setOpenStudentModal(true);
@@ -50,26 +47,25 @@ function TableApi() {
     };
 
     const handleConfirmDelete = () => {
-        axios.delete(`${API_COMMON_URL}/deleteStudent/${selectedRowIdToDelete}`)
+        deleteStudent(selectedRowIdToDelete)
             .then((res) => {
-               let filteredData =data.filter(item=>item.id !== selectedRowIdToDelete)
-               setData(filteredData)
+                let filteredData = formData.filter(item => item.id !== selectedRowIdToDelete)
+                setFormData(filteredData)
                 setConfirmationModal(false);
                 toast.success("Student deleted successfully!", {
-                    toastStyle: { 'background-color': '#4caf50', color: 'white' },
-                        position: "top-right", // Example: Change position
-                        autoClose: 3000, // Example: Close after 3 seconds
-                        hideProgressBar: false, // Example: Hide progress bar
-                        closeOnClick: true, // Example: Close on click
-                        pauseOnHover: true, // Example: Pause on hover
-                        draggable: false, // Example: Disable dragging  
-                        // Add more options as needed
+                    position: "top-right", // Example: Change position
+                    autoClose: 3000, // Example: Close after 3 seconds
+                    hideProgressBar: false, // Example: Hide progress bar
+                    closeOnClick: true, // Example: Close on click
+                    pauseOnHover: true, // Example: Pause on hover
+                    draggable: false, // Example: Disable dragging  
+                    theme: "colored",
 
                 });
             })
             .catch((err) => {
                 console.log(err);
-                // Handle error as needed
+
             });
     };
 
@@ -85,7 +81,7 @@ function TableApi() {
 
     return (
         <div>
-            <ToastContainer />
+            <ToastContainer limit={0} />
             <div className='text-end m-5'>
                 <CommonButton
                     label='+ADD'
@@ -99,34 +95,35 @@ function TableApi() {
                 <StudentModal
                     open={openStudentModal}
                     handleClose={handleCloseStudentModal}
-                    getStudentdata={getStudentdata}
+                    getStudents={getStudents}
                     selectedRow={selectedRow}
+                    formData={formData}
                 />
             )}
 
             {confirmationModal && (
                 <CommonModal
-                open={confirmationModal}
+                    open={confirmationModal}
                     onCancel={handleCloseConfirmationModal}
                     width="500px"
                     content={"Are you Sure to Delete the Item.."}
                     footer={[
-                       <CommonButton
-                       label='Cancel'onClick={handleCloseConfirmationModal}
-                       className='bg-red-500 text-white px-1 py-1 rounded h-8 w-16 mr-3'
-                       
-                       />
-                       ,
-                       <CommonButton
-                       label='Ok'onClick={handleConfirmDelete}
-                       className='bg-green-600 text-white px-1 py-1  rounded h-8 w-16'
-                       
-                       />
+                        <CommonButton
+                            label='Cancel' onClick={handleCloseConfirmationModal}
+                            className='bg-red-500 text-white px-1 py-1 rounded h-8 w-16 mr-3'
+
+                        />
+                        ,
+                        <CommonButton
+                            label='Ok' onClick={handleConfirmDelete}
+                            className='bg-green-600 text-white px-1 py-1  rounded h-8 w-16'
+
+                        />
                     ]}
                 />
             )}
 
-            {data.length > 0 ? (
+            {formData.length > 0 ? (
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead>
@@ -140,7 +137,7 @@ function TableApi() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map((item) => (
+                            {formData.map((item) => (
                                 <TableRow key={item.id}>
                                     <TableCell component="th">{item.firstName}</TableCell>
                                     <TableCell align="right">{item.lastName}</TableCell>
