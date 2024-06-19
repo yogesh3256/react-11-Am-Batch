@@ -119,7 +119,7 @@ export default function CommonTransactionTable(props) {
                                     <TableRow
                                         sx={{
                                             "& th": {
-                                                backgroundColor: "#",////table th bg-color 7fd3f5
+                                                backgroundColor: "#7fd3f5",////table th bg-color 7fd3f5
                                             },
                                         }}
                                     >

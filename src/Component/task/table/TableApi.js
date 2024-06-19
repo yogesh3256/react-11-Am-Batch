@@ -12,7 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import CommonButton from '../../common/Button/CommonButton';
 import StudentModal from './StudentModal';
 import CommonModal from '../../common/modal/CommonModal';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteStudent, getStudentdata } from '../../Services/Student';
 
@@ -26,7 +26,7 @@ function TableApi() {
     useEffect(() => {
         getStudents()
     }, []);
-    const getStudents =()=>{
+    const getStudents = () => {
         getStudentdata()
             .then((res) => {
                 setFormData(res);
@@ -81,7 +81,7 @@ function TableApi() {
 
     return (
         <div>
-            <ToastContainer limit={0} />
+
             <div className='text-end m-5'>
                 <CommonButton
                     label='+ADD'

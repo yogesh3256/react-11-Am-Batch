@@ -3,12 +3,10 @@ import Box from '@mui/material/Box';
 import { Modal } from 'antd';
 import { useForm } from 'react-hook-form';
 import CommonButton from '../../common/Button/CommonButton';
-import axios from 'axios';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CommonTextField from '../../common/TextField/CommonTextField';
 import { CloseOutlined } from '@ant-design/icons';
-import { API_COMMON_URL } from '../../../Http';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { postStudentData, putStudentData } from '../../Services/Student';
@@ -85,7 +83,7 @@ function StudentModal({ open, handleClose, getStudents, selectedRow, formData })
             return;
         }
 
-        if (selectedRow) {
+        if (selectedRow !== null) {
             putStudentData(selectedRow, tempObj)
                 .then((res) => {
                     getStudents();
@@ -143,6 +141,7 @@ function StudentModal({ open, handleClose, getStudents, selectedRow, formData })
                         <div>
                             <CommonTextField
                                 name='firstname'
+                           
                                 error={!!errors.firstname}
                                 type='text'
                                 defaultValue=''

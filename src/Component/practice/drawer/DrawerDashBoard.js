@@ -16,9 +16,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, Routes,Route } from 'react-router-dom';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { Tooltip } from '@mui/material';
+import TableApi  from '../../task/table/TableApi'
 
 const sidebarData = [
   {
@@ -157,7 +159,7 @@ function DrawerDashBoard() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
+          HRMS
           </Typography>
         </Toolbar>
       </AppBar>
@@ -171,7 +173,8 @@ function DrawerDashBoard() {
         <List>
           {sidebarData.length > 0 &&
             sidebarData.map((item, index) => (
-              <ListItem key={index} disablePadding sx={{display:'block'}}>
+             <Tooltip title={item.title} placement="right-start" arrow  TransitionProps={{ timeout: 300 }}>
+               <ListItem key={index} disablePadding sx={{display:'block'}}>
                <NavLink to={item.to}>
                <ListItemButton
                   sx={{
@@ -193,10 +196,17 @@ function DrawerDashBoard() {
                 </ListItemButton>
                </NavLink>
               </ListItem>
+             </Tooltip>
             ))
           }
         </List>
       </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
+        <DrawerHeader />
+       <Routes>
+        <Route path='/' element={<TableApi/>}/>
+       </Routes>
+      </Box>
      
     </Box>
   );
