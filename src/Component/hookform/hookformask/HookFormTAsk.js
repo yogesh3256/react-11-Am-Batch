@@ -164,19 +164,24 @@ function  HookFormTask() {
   ];
 
   React.useEffect(() => {
-    for (let i = 0; i <= arr?.length; i++) {
-      console.log("what is i", i);
-      if (i === 2) {
-        arr[i].b = 4;
-        console.log("22222222", arr);
-      }
-    }
+    // for (let i = 0; i <= arr?.length; i++) {
+    //   console.log("what is i", i);
+    //   if (i === 1) {
+    //     arr[i].b = 4;
+    //     console.log("22222222", arr);
+    //   }
+    // }
 
-    for (let object of arr) {
-      object.b = 4;
-      // console.log("what is i",i);
-      console.log("1111111", arr);
-    }
+
+    arr[2].c=5;
+console.log('push the in object', arr);
+
+
+    // for (let objects of arr) {
+    //   objects.b = 4;
+     
+    //   console.log("1111111", arr);
+    // }
 
     // demoArray.forEach((item, index) => {
     // // console.log("what is i",i);

@@ -21,7 +21,7 @@ const UseFieldArrayForm = () => {
   const numberOfTopFields = watch('numberOfTopFields');
 
   const onAddTopFields = () => {
-    const num = parseInt(numberOfTopFields, 10);
+    const num = parseInt(numberOfTopFields);
     if (!isNaN(num)) {
       setValue('topFields', []); // Clear existing top fields
       for (let i = 0; i < num; i++) {

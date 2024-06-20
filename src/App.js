@@ -64,7 +64,6 @@ import ArrayMapTask from './Component/nestedArrayTask/ArrayMapTask';
 import Api_Handle_Pro from './Component/Api_Handle_Like_PRO/Api_Handle_Pro';
 import DependantMappingParrent from './Component/Dependant Dropdown/dependent Mapping/DependantMappingParrent';
 import ArrayOfObjectVAlidation from './Component/hookform/useFieldArray/ArrayOfObjectVAlidation';
-import UseFieldArrayWithDataPicker from './Component/hookform/useFieldArray/UseFieldArrayWithDataPicker';
 import RecurrsiveMapping from './Component/nestedArrayTask/RecursiveMapping/RecurrsiveMapping';
 import Addiction from './Component/CustomHooks/Addiction';
 import TodoAppUseContext from './Component/Todo app/todocomponent/TodoAppUseContext';
@@ -73,6 +72,8 @@ import PaginationTableTask from './Component/Pagination Table/PaginationTableTas
 import PaginationWithApi from './Component/Pagination Table/PaginationWithApi';
 import HookFormPropTest from './Component/hookform/HookFormPropTest';
 import DrawerDashBoard from './Component/practice/drawer/DrawerDashBoard';
+import PracticeUseFieldArray from './Component/hookform/useFieldArray/PracticeUseFieldArray';
+import PacitceTask from './Component/practice/practice Task/PacitceTask';
 
 
 
@@ -167,11 +168,13 @@ function App() {
 
         {/* practice Task */}
         {/* <Hide_Passward/> */}
+        {/* <PacitceTask/> */}
 
         {/* <Todoapp/> */}
         {/* <Dropdown/> */}
         {/* <DependantMappingParrent/> */}
         {/* <ArrayOfObjectVAlidation/> */}
+        {/* <PracticeUseFieldArray/> */}
 
 
         {/* <Form/>   */}
@@ -185,7 +188,7 @@ function App() {
  <ParrentTab/> */}
         {/* <UseFieldArrayForm/> */}
 {/* <HookFormPropTest/> */}
-<DrawerDashBoard/>
+{/* <DrawerDashBoard/> */}
 
         {/* <DateTaskForm/> */}
 
@@ -196,7 +199,7 @@ function App() {
         {/* <RowColSpanTable/> */}
         {/* <DocItLoginForm/> */}
         {/* <DropDownTable/> */}
-        {/* <TableApi/> */}
+        <TableApi/>
         {/* <HookFormTAsk/> */}
         {/* <ArrayMapTask/> */}
         {/* <RecurrsiveMapping/> */}

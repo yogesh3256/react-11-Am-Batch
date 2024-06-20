@@ -391,7 +391,7 @@ const dataArr = {
 function MedicationPrint() {
   return (
     <div className="w-full overflow-x-auto">
-      <table className="border">
+      {dataArr.MedicationChartDetails.length > 0 ? (<table className="border">
         <thead className="border">
           <tr className="border whitespace-nowrap">
             <th className="border bg-gray-100" rowSpan={2}>
@@ -502,6 +502,12 @@ function MedicationPrint() {
           }
         </tbody>
       </table>
+      )
+        :
+        (
+          <h1 className="text-xl font-bold text-center ">No Records Found....</h1>
+        )}
+
 
     </div>
   );

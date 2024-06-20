@@ -28,7 +28,7 @@ function UseLayoutHook() {
         userPosts.map((list) => {
           return (
             <>
-            <div className="border rounded shadow">
+            <div key={list.id} className="border rounded shadow">
               <h1 className=" text-center">{list.title}</h1>
               <img src={list.url} />
             </div>

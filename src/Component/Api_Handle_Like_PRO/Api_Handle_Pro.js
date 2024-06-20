@@ -13,7 +13,7 @@ function Api_Handle_Pro() {
                 setError(false);
 
                 // Simulate a delay before making the API call
-                await new Promise(resolve => setTimeout(resolve, 3000)); // 2 seconds delay
+                await new Promise(resolve => setTimeout(resolve, 3000)); // 3 seconds delay
 
                 const response = await axios.get('https://jsonplaceholder.typicode.com/users');
 
@@ -27,11 +27,11 @@ function Api_Handle_Pro() {
     }, []);
 
     if (loading) {
-        return <h1 className='text-2xl text-center font-bold'>Loading.....</h1>;
+        return <h1 className='text-2xl text-center '>Loading.....</h1>;
     }
 
     if (error) {
-        return <h1 className='text-2xl text-center font-bold'>SomeThing went wrong.....</h1>;
+        return <h1 className='text-2xl text-center '>SomeThing went wrong.....</h1>;
     }
 
     return (
