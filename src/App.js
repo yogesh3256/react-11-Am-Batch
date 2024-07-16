@@ -23,7 +23,7 @@ import Drugs from './Component/form/Drugs';
 // import InputFeildTask from './Component/task/InputfeildTask';
 // import InputCheckbox from './Component/form/InputCheckbox';
 // import Counter from './Component/task/Counter';
-// import Parent from './Component/props/Parrent';
+import Parent from './Component/props/Parrent';
 import Curdopration from './Component/curdoperation/Curdoperation'
 import Contact from './Component/router/Contact';
 import { Home } from '@mui/icons-material';
@@ -168,7 +168,7 @@ function App() {
 
         {/* practice Task */}
         {/* <Hide_Passward/> */}
-        {/* <PacitceTask/> */}
+        <PacitceTask/>
 
         {/* <Todoapp/> */}
         {/* <Dropdown/> */}
@@ -184,8 +184,8 @@ function App() {
         {/* <ItemMaster/> */}
         {/* <Navbar/> */}
         {/* <ModalAdd/> */}
-        {/* 
- <ParrentTab/> */}
+        
+ {/* <ParrentTab/> */}
         {/* <UseFieldArrayForm/> */}
 {/* <HookFormPropTest/> */}
 {/* <DrawerDashBoard/> */}
@@ -199,7 +199,7 @@ function App() {
         {/* <RowColSpanTable/> */}
         {/* <DocItLoginForm/> */}
         {/* <DropDownTable/> */}
-        <TableApi/>
+        {/* <TableApi/> */}
         {/* <HookFormTAsk/> */}
         {/* <ArrayMapTask/> */}
         {/* <RecurrsiveMapping/> */}

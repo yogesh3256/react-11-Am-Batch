@@ -8,63 +8,90 @@ function PracticeTask() {
     const inputFields = [
         {
             id: 1,
+            name: 'userName',
             label: 'Username',
             type: 'text',
         },
         {
             id: 2,
+            name: 'password',
             label: 'Password',
             type: 'password',
+        },
+        {
+            id: 3,
+            name: 'age',
+            label: 'Age',
+            type: 'number',
+        },
+        {
+            id: 4,
+            name: 'phoneNo',
+            label: 'PhoneNo',
+            type: 'text',
         }
     ];
 
-    const [userName, setUserName] = useState('');
-    const [password, setPassword] = useState('');
-    const [isShowPassword, setIsShowPassword] = useState(false)
+    const [formData, setFormData] = useState({
+        userName: '',
+        password: '',
+        age: '',
+        phoneNo: ''
+    });
+    const [data, setData] = useState([])
+    console.log("data", data);
+    const [isShowPassword, setIsShowPassword] = useState(false);
 
-    const handleUserNameChange = (e) => {
-        setUserName(e.target.value);
-    }
-
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    };
 
     const handleSubmitInputForm = (e) => {
         e.preventDefault();
-        if (userName === "" || password === "") {
+        const { userName, password, age } = formData;
+        if (userName === "" || password === "" || age === "") {
             alert("Please fill all the fields");
         } else {
-            alert("form Submitted SucessFully...");
-            console.log(userName,password);
+            alert("Form submitted successfully...");
+            console.log(formData);
+            setData([...data, formData])
+            setFormData({
+                userName: '',
+                password: '',
+                age: ''
+            })
         }
-    }
+    };
+
     const handleisPassWordShow = () => {
-        setIsShowPassword(!isShowPassword)
-    }
+        setIsShowPassword(!isShowPassword);
+    };
 
     return (
         <div className="flex justify-center h-screen">
-            <form className="flex flex-col mt-7 gap-4" onSubmit={handleSubmitInputForm}>
-                {inputFields.map((inputField, index) => (
-                    <div key={inputField.id}>
+            <form className="flex flex-col mt-7 gap-4 border p-3" onSubmit={handleSubmitInputForm}>
+                {inputFields.map((inputField) => (
+                    <div key={inputField.id} style={{ width: '100%' }}>
                         <TextField
+                            fullWidth
                             label={inputField.label}
-                            type={isShowPassword ? 'text' : inputField.type}
-                            value={index === 0 ? userName : password}
-                            onChange={index === 0 ? handleUserNameChange : handlePasswordChange}
+                            name={inputField.name}
+                            type={inputField.id === 2 ? (isShowPassword ? 'text' : 'password') : inputField.type}
+                            value={formData[inputField.id]}
+                            onChange={handleInputChange}
                             size="small"
-                            InputProps={index === 1 && ({
+                            InputProps={inputField.id === 2 ? ({
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        {
-                                            isShowPassword ? <VisibilityIcon onClick={handleisPassWordShow} />:<VisibilityOffIcon onClick={handleisPassWordShow} />
-                                        }
-
-
+                                        {isShowPassword ? (
+                                            <VisibilityIcon onClick={handleisPassWordShow} />
+                                        ) : (
+                                            <VisibilityOffIcon onClick={handleisPassWordShow} />
+                                        )}
                                     </InputAdornment>
                                 ),
-                            })}
+                            }) : {}}
                         />
                     </div>
                 ))}

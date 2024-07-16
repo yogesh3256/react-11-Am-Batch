@@ -1,25 +1,17 @@
 import React, { useContext } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { TextField, Button, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel } from '@mui/material';
-import { useState } from 'react';
 import { NewContext } from '../Newcontext';
 
 function BasicInformation() {
-  const { details, setDetails,goToNextTab } = useContext(NewContext)
-  const { control, handleSubmit,reset } = useForm();
 
-  const onSubmit = (data) => {
-    // Ensure details is initialized as an array
-    const tempData = Array.isArray(details) ? [...details] : [];
-    tempData.push(data);
-    setDetails(tempData);
-    reset();
-    goToNextTab();
-  };
+  const { control, } = useFormContext();
+  const { value, setValue } = useContext(NewContext)
 
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='space-y-3' style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '5px' }}>
+
+    <>
       <div className=' grid grid-cols-3 gap-3'>
         <div>
           <Controller
@@ -147,32 +139,33 @@ function BasicInformation() {
           />
         </div>
 
-       
+
 
       </div>
       <div>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Gender</FormLabel>
-            <Controller
-              name="gender"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <RadioGroup row aria-label="gender" {...field}>
-                  <FormControlLabel value="female" control={<Radio />} label="Female" />
-                  <FormControlLabel value="male" control={<Radio />} label="Male" />
-                  <FormControlLabel value="other" control={<Radio />} label="Other" />
-                </RadioGroup>
-              )}
-            />
-          </FormControl>
-        </div>
-        <div className='space-x-3'>
-          
-      <Button  variant="contained" color="primary">Preview</Button>
-      <Button type="submit" variant="contained" color="primary">Next</Button>
-        </div>
-    </form>
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Gender</FormLabel>
+          <Controller
+            name="gender"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <RadioGroup row aria-label="gender" {...field}>
+                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                <FormControlLabel value="other" control={<Radio />} label="Other" />
+              </RadioGroup>
+            )}
+          />
+        </FormControl>
+      </div>
+      <div className='space-x-3'>
+
+        <Button onClick={() => setValue(value - 1)} variant="contained" color="primary">Preview</Button>  
+        <Button onClick={() => setValue(value + 1)} type="submit" variant="contained" color="primary">Next</Button>
+      </div>
+
+    </>
   );
 }
 
